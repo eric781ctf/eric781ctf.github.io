@@ -22,15 +22,18 @@
 
   <meta name="description" content="大家好，今天來分享一下我使用 Hexo 建立這個 blog 的過程。我知道 Hexo 很久了，但今天才下定決心使用 Hexo 來建立我的個人 blog，主要也是希望這樣可以逼迫自己好好的紀錄從碩士時期開始到現在亂點技能樹的歷程 XD">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Learn hexo">
+<meta property="og:title" content="【筆記】Hexo + GitHub Pages">
 <meta property="og:url" content="https://eric781ctf.github.io/2024/10/03/Learn-hexo/index.html">
 <meta property="og:site_name" content="Eric&#39;s learning blog">
 <meta property="og:description" content="大家好，今天來分享一下我使用 Hexo 建立這個 blog 的過程。我知道 Hexo 很久了，但今天才下定決心使用 Hexo 來建立我的個人 blog，主要也是希望這樣可以逼迫自己好好的紀錄從碩士時期開始到現在亂點技能樹的歷程 XD">
 <meta property="og:locale" content="zh_TW">
 <meta property="article:published_time" content="2024-10-03T07:21:53.000Z">
-<meta property="article:modified_time" content="2024-10-03T15:47:45.658Z">
+<meta property="article:modified_time" content="2024-10-09T13:09:45.826Z">
 <meta property="article:author" content="Eric">
-<meta property="article:tag" content="純分享">
+<meta property="article:tag" content="Hexo">
+<meta property="article:tag" content="NexT">
+<meta property="article:tag" content="GitHub Pages">
+<meta property="article:tag" content="Sitemap">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="https://eric781ctf.github.io/2024/10/03/Learn-hexo/">
@@ -46,7 +49,7 @@
   };
 </script>
 
-  <title>Learn hexo | Eric's learning blog</title>
+  <title>【筆記】Hexo + GitHub Pages | Eric's learning blog</title>
   
 
 
@@ -100,7 +103,7 @@
       <h1 class="site-title">Eric's learning blog</h1>
       <span class="logo-line-after"><i></i></span>
     </a>
-      <p class="site-subtitle" itemprop="description">各式各樣的羊</p>
+      <p class="site-subtitle" itemprop="description">一隻亂跑的羊</p>
   </div>
 
   <div class="site-nav-right">
@@ -131,12 +134,12 @@
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">2</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">5</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分類<span class="badge">1</span></a>
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分類<span class="badge">2</span></a>
 
   </li>
         <li class="menu-item menu-item-sitemap">
@@ -186,7 +189,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Learn hexo
+          【筆記】Hexo + GitHub Pages
         </h1>
 
         <div class="post-meta">
@@ -195,17 +198,23 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">發表於</span>
-              
 
-              <time title="創建時間：2024-10-03 15:21:53 / 修改時間：23:47:45" itemprop="dateCreated datePublished" datetime="2024-10-03T15:21:53+08:00">2024-10-03</time>
+              <time title="創建時間：2024-10-03 15:21:53" itemprop="dateCreated datePublished" datetime="2024-10-03T15:21:53+08:00">2024-10-03</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新於</span>
+                <time title="修改時間：2024-10-09 21:09:45" itemprop="dateModified" datetime="2024-10-09T21:09:45+08:00">2024-10-09</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
               <span class="post-meta-item-text">分類於</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AF%A6%E4%BD%9C/" itemprop="url" rel="index"><span itemprop="name">實作</span></a>
+                  <a href="/categories/%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">筆記</span></a>
                 </span>
             </span>
 
@@ -229,13 +238,74 @@
 </ul>
 <h2 id="安裝-Hexo"><a href="#安裝-Hexo" class="headerlink" title="安裝 Hexo"></a>安裝 Hexo</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
 
-<h1 id="設置"><a href="#設置" class="headerlink" title="設置"></a>設置</h1><p>當環境安裝完成後，選擇你要作為 hexo 的目錄。本文以<code>C:\Users\User\Desktop\hexo_website</code>為例。</p>
+<h1 id="設置"><a href="#設置" class="headerlink" title="設置"></a>設置</h1><p>當環境安裝完成後，選擇你要作為 Hexo 的目錄。本文以<code>C:\Users\User\Desktop\hexo_website</code>為例。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ hexo init C:\Users\User\Desktop\hexo_website</span><br><span class="line">$ cd C:\Users\User\Desktop\hexo_website</span><br></pre></td></tr></table></figure>
 
 <p>執行完畢後，<code>C:\Users\User\Desktop\hexo_website</code>內的結構應如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">.</span><br><span class="line">├── _config.yml</span><br><span class="line">├── package.json</span><br><span class="line">├── scaffolds</span><br><span class="line">├── source</span><br><span class="line">|   ├── _drafts</span><br><span class="line">|   └── _posts</span><br><span class="line">└── themes</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">.</span><br><span class="line">├── _config.yml</span><br><span class="line">├── package.json</span><br><span class="line">├── scaffolds</span><br><span class="line">|   ├── draft.md</span><br><span class="line">|   ├── page.md</span><br><span class="line">|   └── post.md</span><br><span class="line">├── source</span><br><span class="line">|   ├── _drafts</span><br><span class="line">|   └── _posts</span><br><span class="line">└── themes</span><br></pre></td></tr></table></figure>
 
-<h2 id="config-yml"><a href="#config-yml" class="headerlink" title="_config.yml"></a>_config.yml</h2><h2 id="scaffolds"><a href="#scaffolds" class="headerlink" title="scaffolds"></a>scaffolds</h2><h2 id="source"><a href="#source" class="headerlink" title="source"></a>source</h2><h2 id="themes"><a href="#themes" class="headerlink" title="themes"></a>themes</h2>
+<h2 id="設定檔"><a href="#設定檔" class="headerlink" title="設定檔"></a>設定檔</h2><p>主要會更改的有以下兩個：</p>
+<ul>
+<li>_config.yml</li>
+<li>_config.{theme_name}.yml<ul>
+<li>本文為：_config.next.yml</li>
+</ul>
+</li>
+</ul>
+<h2 id="使用-NexT-theme"><a href="#使用-NexT-theme" class="headerlink" title="使用 NexT theme"></a>使用 NexT theme</h2><h3 id="安裝-NexT"><a href="#安裝-NexT" class="headerlink" title="安裝 NexT"></a>安裝 <a target="_blank" rel="noopener" href="https://theme-next.js.org/docs/getting-started/">NexT</a></h3><p>確保 cmd 路徑在 <code>C:\Users\User\Desktop\hexo_website</code> 後執行以下指令。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install hexo-theme-next</span><br></pre></td></tr></table></figure>
+
+<p>或是可以直接 git clone，本文是使用 npm 進行安裝。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ cd hexo-site</span><br><span class="line">$ git clone https://github.com/next-theme/hexo-theme-next themes/next</span><br></pre></td></tr></table></figure>
+
+<p>確認資料夾最外層是否有 <code>_config.next.yml</code>。如果沒有的話可直接將 <code>/themes/next/_config.yml</code> 複製出來並更名為 <code>_config.next.yml</code>。</p>
+<p>進入 <code>_config.yml</code>，並更改以下參數：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">theme: next</span><br></pre></td></tr></table></figure>
+
+<h1 id="常用指令"><a href="#常用指令" class="headerlink" title="常用指令"></a>常用指令</h1><h2 id="新增"><a href="#新增" class="headerlink" title="新增"></a>新增</h2><p>輸入以下指令會根據 <code>/scaffolds/post.md</code> 模板建立一個 <code>/source/_posts/&#123;title&#125;.md</code> 文件供撰寫新的文章</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new post &#123;title&#125;</span><br></pre></td></tr></table></figure>
+
+<p>輸入以下指令會根據 <code>/scaffolds/page.md</code> 模板建立一個 <code>/source/&#123;page name&#125;/index.md</code> 文件供撰寫新的頁面</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new page &#123;page name&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="clean-清除靜態檔案與快取"><a href="#clean-清除靜態檔案與快取" class="headerlink" title="clean 清除靜態檔案與快取"></a>clean 清除靜態檔案與快取</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ hexo clean</span><br><span class="line">or</span><br><span class="line">$ hexo cl</span><br></pre></td></tr></table></figure>
+
+<h2 id="generate-產生靜態檔案"><a href="#generate-產生靜態檔案" class="headerlink" title="generate 產生靜態檔案"></a>generate 產生靜態檔案</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br><span class="line">or</span><br><span class="line">$ hexo g</span><br></pre></td></tr></table></figure>
+
+<h2 id="server-啟動伺服器"><a href="#server-啟動伺服器" class="headerlink" title="server 啟動伺服器"></a>server 啟動伺服器</h2><p>可在 local 端建立 Hexo 伺服器，預設為：<a target="_blank" rel="noopener" href="http://localhost:4000/">http://localhost:4000/</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br><span class="line">or</span><br><span class="line">$ hexo s</span><br></pre></td></tr></table></figure>
+
+<h2 id="deploy-部署"><a href="#deploy-部署" class="headerlink" title="deploy 部署"></a>deploy 部署</h2><p>可直接透過 git 部署到 GitHub Page</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br><span class="line">or</span><br><span class="line">$ hexo d</span><br></pre></td></tr></table></figure>
+
+<h1 id="部署到-GitHub-Pages"><a href="#部署到-GitHub-Pages" class="headerlink" title="部署到 GitHub Pages"></a>部署到 GitHub Pages</h1><h2 id="建立-Repo"><a href="#建立-Repo" class="headerlink" title="建立 Repo"></a>建立 Repo</h2><p>首先，先建立 GitHub Repo：<code>&#123;username&#125;.github.io</code>。<br>恩…這邊好像也沒啥好說的XD</p>
+<h2 id="上傳！"><a href="#上傳！" class="headerlink" title="上傳！"></a>上傳！</h2><h3 id="Git-安裝"><a href="#Git-安裝" class="headerlink" title="Git 安裝"></a>Git 安裝</h3><p>回到 Hexo 資料夾，下載 Hexo 的 Git 套件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
+
+<h3 id="修改-config-yml-的設定"><a href="#修改-config-yml-的設定" class="headerlink" title="修改 _config.yml 的設定"></a>修改 _config.yml 的設定</h3><p>修改 _config.yml 有關 deploy 的設定參數。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: https://github.com/username/username.github.io.git</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
+
+<h3 id="輸入指令啦"><a href="#輸入指令啦" class="headerlink" title="輸入指令啦"></a>輸入指令啦</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ hexo cl</span><br><span class="line">$ hexo g</span><br><span class="line">$ hexo d</span><br></pre></td></tr></table></figure>
+
+<p>這樣就完成啦~ 在 Repo 裡面會顯示更新的圖示，等到 deploy finish 就可以到自己的網址中看看成果了！</p>
+<h1 id="Sitemap-Google-Search-Console"><a href="#Sitemap-Google-Search-Console" class="headerlink" title="Sitemap &amp; Google Search Console"></a>Sitemap &amp; Google Search Console</h1><h2 id="Sitemap"><a href="#Sitemap" class="headerlink" title="Sitemap"></a>Sitemap</h2><p>:::info<br>Sitemap 是用來描述網頁的架構，主要是用來讓搜尋引擎的爬蟲找的到網頁用的（我淺顯的理解）<br>:::</p>
+<p>回到 Hexo 資料夾，下載 Hexo 建立 sitemap 套件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install hexo-generator-sitemap --save</span><br></pre></td></tr></table></figure>
+
+<p>接著進入 <code>_config.yml</code> 修改以下參數</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># URL</span><br><span class="line">## Set your site url here. For example, if you use GitHub Page, set url as &#x27;https://username.github.io/project&#x27;</span><br><span class="line">url: https://username.github.io</span><br><span class="line">permalink: :year/:month/:day/:title/</span><br><span class="line">permalink_defaults:</span><br><span class="line">pretty_urls:</span><br><span class="line">  trailing_index: true # Set to false to remove trailing &#x27;index.html&#x27; from permalinks</span><br><span class="line">  trailing_html: true # Set to false to remove trailing &#x27;.html&#x27; from permalinks</span><br></pre></td></tr></table></figure>
+
+<p>再重新 generator 後會看到 <code>sitemap.xml</code> 就搞定了！</p>
+<h2 id="Google-Search-Console"><a href="#Google-Search-Console" class="headerlink" title="Google Search Console"></a>Google Search Console</h2><p>到 <a target="_blank" rel="noopener" href="https://search.google.com/search-console?utm_source=about-page">Google Search Console</a> 進行 sitemap 的驗證和提交。</p>
+<p>在右側的「網址前置字元」輸入你的 URL。<br><a href="/images/Learn-hexo/google_search_console_figure_1.PNG">Google Search Console Fig.1</a></p>
+<p>下載圖中的 .html 並放置在 <code>/source/google&#123;parameter&#125;.html</code><br><a href="/images/Learn-hexo/google_search_console_figure_2.PNG">Google Search Console Fig.2</a></p>
+<p>接著，重新執行！</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ hexo g</span><br><span class="line">$ hexo d</span><br></pre></td></tr></table></figure>
+
+<p>成功部署後，回到 Google Search Console 按下驗證啦！</p>
+<p>驗證成功後就可以等待一兩天，等 Google 的小猴子來訪後，就可以直接 Google search 到你的網頁啦~</p>
+<h1 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h1><p>今天裡面對於 NexT 主題的各種更動並沒有記錄在內，這裡也有很多細節是需要注意的，但或許之後找時間再來慢慢分享。今天就主要 focus 在讓這個網頁可以順利啟動吧！</p>
+
     </div>
 
     
@@ -244,7 +314,10 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/%E7%B4%94%E5%88%86%E4%BA%AB/" rel="tag"># 純分享</a>
+              <a href="/tags/Hexo/" rel="tag"># Hexo</a>
+              <a href="/tags/NexT/" rel="tag"># NexT</a>
+              <a href="/tags/GitHub-Pages/" rel="tag"># GitHub Pages</a>
+              <a href="/tags/Sitemap/" rel="tag"># Sitemap</a>
           </div>
 
         
@@ -315,7 +388,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8B%E7%92%B0%E5%A2%83"><span class="nav-number">1.</span> <span class="nav-text">建立環境</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E9%9C%80%E6%B1%82"><span class="nav-number">1.1.</span> <span class="nav-text">基本需求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%9D-Hexo"><span class="nav-number">1.2.</span> <span class="nav-text">安裝 Hexo</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A8%AD%E7%BD%AE"><span class="nav-number">2.</span> <span class="nav-text">設置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#config-yml"><span class="nav-number">2.1.</span> <span class="nav-text">_config.yml</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#scaffolds"><span class="nav-number">2.2.</span> <span class="nav-text">scaffolds</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#source"><span class="nav-number">2.3.</span> <span class="nav-text">source</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#themes"><span class="nav-number">2.4.</span> <span class="nav-text">themes</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8B%E7%92%B0%E5%A2%83"><span class="nav-number">1.</span> <span class="nav-text">建立環境</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E9%9C%80%E6%B1%82"><span class="nav-number">1.1.</span> <span class="nav-text">基本需求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%9D-Hexo"><span class="nav-number">1.2.</span> <span class="nav-text">安裝 Hexo</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A8%AD%E7%BD%AE"><span class="nav-number">2.</span> <span class="nav-text">設置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A8%AD%E5%AE%9A%E6%AA%94"><span class="nav-number">2.1.</span> <span class="nav-text">設定檔</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-NexT-theme"><span class="nav-number">2.2.</span> <span class="nav-text">使用 NexT theme</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%9D-NexT"><span class="nav-number">2.2.1.</span> <span class="nav-text">安裝 NexT</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4"><span class="nav-number">3.</span> <span class="nav-text">常用指令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B0%E5%A2%9E"><span class="nav-number">3.1.</span> <span class="nav-text">新增</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#clean-%E6%B8%85%E9%99%A4%E9%9D%9C%E6%85%8B%E6%AA%94%E6%A1%88%E8%88%87%E5%BF%AB%E5%8F%96"><span class="nav-number">3.2.</span> <span class="nav-text">clean 清除靜態檔案與快取</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#generate-%E7%94%A2%E7%94%9F%E9%9D%9C%E6%85%8B%E6%AA%94%E6%A1%88"><span class="nav-number">3.3.</span> <span class="nav-text">generate 產生靜態檔案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#server-%E5%95%9F%E5%8B%95%E4%BC%BA%E6%9C%8D%E5%99%A8"><span class="nav-number">3.4.</span> <span class="nav-text">server 啟動伺服器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#deploy-%E9%83%A8%E7%BD%B2"><span class="nav-number">3.5.</span> <span class="nav-text">deploy 部署</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%83%A8%E7%BD%B2%E5%88%B0-GitHub-Pages"><span class="nav-number">4.</span> <span class="nav-text">部署到 GitHub Pages</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8B-Repo"><span class="nav-number">4.1.</span> <span class="nav-text">建立 Repo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8A%E5%82%B3%EF%BC%81"><span class="nav-number">4.2.</span> <span class="nav-text">上傳！</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Git-%E5%AE%89%E8%A3%9D"><span class="nav-number">4.2.1.</span> <span class="nav-text">Git 安裝</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9-config-yml-%E7%9A%84%E8%A8%AD%E5%AE%9A"><span class="nav-number">4.2.2.</span> <span class="nav-text">修改 _config.yml 的設定</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BC%B8%E5%85%A5%E6%8C%87%E4%BB%A4%E5%95%A6"><span class="nav-number">4.2.3.</span> <span class="nav-text">輸入指令啦</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Sitemap-Google-Search-Console"><span class="nav-number">5.</span> <span class="nav-text">Sitemap &amp; Google Search Console</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Sitemap"><span class="nav-number">5.1.</span> <span class="nav-text">Sitemap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Google-Search-Console"><span class="nav-number">5.2.</span> <span class="nav-text">Google Search Console</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AA%9E"><span class="nav-number">6.</span> <span class="nav-text">結語</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -338,13 +411,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-count">2</span>
         <span class="site-state-item-name">分類</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-count">5</span>
         <span class="site-state-item-name">標籤</span></a>
       </div>
   </nav>
