@@ -27,18 +27,16 @@
 <meta property="og:site_name" content="Eric&#39;s learning blog">
 <meta property="og:description" content="最近開始用一些濾鏡軟體去拍攝日常的照片或是風景，拍著拍著總覺得有些濾鏡就是差那麼一點就是我心目中最完美的感覺了。於是我就在想我應該也可以運用以前學過的影像處理和研究所被老師逼迫出來的奇怪技能樹來嘗試看看修圖！當然，對影像處理熟悉的各位一定都知道，濾鏡就是一個 mask 覆蓋在原本的圖片上，但就是這樣的東西，可以被各種濾鏡 App 玩出花樣來，實在是太有趣了，這個系列會以不同的濾鏡為單位進行實作的嘗">
 <meta property="og:locale" content="zh_TW">
-<meta property="og:image" content="https://eric781ctf.github.io/images/pencil-sketch/gray.jpg">
-<meta property="og:image" content="https://eric781ctf.github.io/images/pencil-sketch/reverse_gray.jpg">
 <meta property="og:image" content="https://eric781ctf.github.io/images/pencil-sketch/blurred.jpg">
 <meta property="og:image" content="https://eric781ctf.github.io/images/pencil-sketch/pencil_sketch.jpg">
 <meta property="article:published_time" content="2024-10-09T15:38:34.000Z">
-<meta property="article:modified_time" content="2024-10-09T16:11:25.552Z">
+<meta property="article:modified_time" content="2024-10-11T02:09:47.920Z">
 <meta property="article:author" content="Eric">
 <meta property="article:tag" content="影像處理">
 <meta property="article:tag" content="Python">
 <meta property="article:tag" content="OpenCV">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://eric781ctf.github.io/images/pencil-sketch/gray.jpg">
+<meta name="twitter:image" content="https://eric781ctf.github.io/images/pencil-sketch/blurred.jpg">
 
 <link rel="canonical" href="https://eric781ctf.github.io/2024/10/09/pencil-sketch/">
 
@@ -210,7 +208,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新於</span>
-                <time title="修改時間：2024-10-10 00:11:25" itemprop="dateModified" datetime="2024-10-10T00:11:25+08:00">2024-10-10</time>
+                <time title="修改時間：2024-10-11 10:09:47" itemprop="dateModified" datetime="2024-10-11T10:09:47+08:00">2024-10-11</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -239,11 +237,11 @@
 <h1 id="想法"><a href="#想法" class="headerlink" title="想法"></a>想法</h1><p>基本上，一張鉛筆素描的主要元素就是灰階的色系，所以！先把圖片轉乘灰階就對了！</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gray_img = cv2.cvtColor(rgb_img, cv2.COLOR_RGB2GRAY)</span><br></pre></td></tr></table></figure>
 
-<p><img src="/images/pencil-sketch/gray.jpg" alt="gray_img"></p>
+<p>![gray_img](&#x2F;images&#x2F;pencil-sketch&#x2F;gray.jpg#pic_center &#x3D;600x600)</p>
 <p>素描的 mask 應該是有點深色的！所以接著把圖片反轉！</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reverse_gray = 255 - gray_img</span><br></pre></td></tr></table></figure>
 
-<p><img src="/images/pencil-sketch/reverse_gray.jpg" alt="reverse_gray"></p>
+<p>![reverse_gray](&#x2F;images&#x2F;pencil-sketch&#x2F;reverse_gray.jpg#pic_center &#x3D;600x600)</p>
 <p>恩…素描應該都有點紙張糊糊的感覺吧！那我用卷積（convolution）來做高斯模糊好了！咦？這種東西 OpenCV 應該有吧？我看看…<br>居然還可以選擇捲積的大小，那我就設 (15,15) 吧。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">blurred_img = cv2.GaussianBlur(reverse_gray, (15,15), 0, 0)</span><br></pre></td></tr></table></figure>
 
