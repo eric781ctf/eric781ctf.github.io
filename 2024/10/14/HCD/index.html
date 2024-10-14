@@ -31,7 +31,7 @@
 <meta property="og:image" content="https://eric781ctf.github.io/images/HCD/gray.jpg">
 <meta property="og:image" content="https://eric781ctf.github.io/images/HCD/dst.jpg">
 <meta property="article:published_time" content="2024-10-14T12:26:33.000Z">
-<meta property="article:modified_time" content="2024-10-14T15:10:11.821Z">
+<meta property="article:modified_time" content="2024-10-14T15:15:26.981Z">
 <meta property="article:author" content="Eric">
 <meta property="article:tag" content="影像處理">
 <meta property="article:tag" content="Python">
@@ -203,7 +203,7 @@
               <span class="post-meta-item-text">發表於</span>
               
 
-              <time title="創建時間：2024-10-14 20:26:33 / 修改時間：23:10:11" itemprop="dateCreated datePublished" datetime="2024-10-14T20:26:33+08:00">2024-10-14</time>
+              <time title="創建時間：2024-10-14 20:26:33 / 修改時間：23:15:26" itemprop="dateCreated datePublished" datetime="2024-10-14T20:26:33+08:00">2024-10-14</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -248,7 +248,7 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dst = cv2.dilate(dst,None)</span><br><span class="line">rgb_image[dst&gt;0.01*dst.max()]=[0,0,255]</span><br></pre></td></tr></table></figure>
 
 <p><img src="/images/HCD/dst.jpg" alt="gray_img"></p>
-<p>這樣就可以定位出 IC 托盤上每個孔的位置啦~~~</p>
+<p>不過不難發現，標出來的點有很多雜訊，因為桌子是有紋路的，而 HCD 的偵測方式之一就是兩條邊的周圍有明顯的光影變化。<br>當然在嚴謹的廠區中，這種狀況並不會發生，參數調整一下還是可以定位出 IC 托盤上每個孔的位置啦~~~</p>
 <h1 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h1><p>當初花了時間研究了很多種方式去計算 IC 托盤上每個格子的位置，也嘗試過 data augmentaion 再丟 CNN 然後 SVM 做分類器。最後發現不是用越複雜的技術就一定可以達到成果，有時候簡單的方式也可以做到我們想要的效果。</p>
 <p>因為攝影機的位置是固定的，廠內也不會關燈，後來我提出了以下方案也被老師們和科技廠窗口接受：</p>
 <ol>
