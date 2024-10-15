@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://eric781ctf.github.io/%E8%BD%89%E7%9B%A4/index.html</loc>
+    <loc>https://eric781ctf.github.io/2024/10/15/learning-unit-test/</loc>
     
     <lastmod>2024-10-15</lastmod>
     
@@ -140,6 +140,13 @@
     <priority>0.2</priority>
   </url>
   
+  <url>
+    <loc>https://eric781ctf.github.io/tags/Unit-test/</loc>
+    <lastmod>2024-10-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
 
   
   <url>
@@ -151,6 +158,13 @@
   
   <url>
     <loc>https://eric781ctf.github.io/categories/%E5%AF%A6%E4%BD%9C/</loc>
+    <lastmod>2024-10-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://eric781ctf.github.io/categories/%E5%AD%B8%E7%BF%92%E7%B4%80%E9%8C%84/</loc>
     <lastmod>2024-10-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
