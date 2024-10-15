@@ -20,15 +20,15 @@
     var CONFIG = {"hostname":"eric781ctf.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="title: 易經64卦轉盤                       乾         坤         屯         蒙                  未濟          轉盤開始        &#x2F;* 轉盤容器 *&#x2F; .wheel-container {     position: relative;     width: 300px;     height: 300">
+  <meta name="description" content="1         2         3         4         5         6         7         8               開始             * {         box-sizing: border-box;         margin: 0;         padding: 0;     }">
 <meta property="og:type" content="website">
 <meta property="og:title" content="轉盤">
 <meta property="og:url" content="https://eric781ctf.github.io/%E8%BD%89%E7%9B%A4/index.html">
 <meta property="og:site_name" content="Eric&#39;s learning blog">
-<meta property="og:description" content="title: 易經64卦轉盤                       乾         坤         屯         蒙                  未濟          轉盤開始        &#x2F;* 轉盤容器 *&#x2F; .wheel-container {     position: relative;     width: 300px;     height: 300">
+<meta property="og:description" content="1         2         3         4         5         6         7         8               開始             * {         box-sizing: border-box;         margin: 0;         padding: 0;     }">
 <meta property="og:locale" content="zh_TW">
 <meta property="article:published_time" content="2024-10-15T06:17:37.000Z">
-<meta property="article:modified_time" content="2024-10-15T06:32:51.338Z">
+<meta property="article:modified_time" content="2024-10-15T06:38:32.955Z">
 <meta property="article:author" content="Eric">
 <meta property="article:tag" content="Data engineer">
 <meta name="twitter:card" content="summary">
@@ -197,121 +197,126 @@
       
       
       <div class="post-body">
-          <!-- 在這裡加入內嵌 CSS -->
-
-<hr>
-<h2 id="title-易經64卦轉盤"><a href="#title-易經64卦轉盤" class="headerlink" title="title: 易經64卦轉盤"></a>title: 易經64卦轉盤</h2><div class="wheel-container">
-    <div id="wheel" class="wheel">
-        <!-- 每個扇形代表一個卦 -->
-        <div class="segment" style="transform: rotate(0deg);"><span>乾</span></div>
-        <div class="segment" style="transform: rotate(5.625deg);"><span>坤</span></div>
-        <div class="segment" style="transform: rotate(11.25deg);"><span>屯</span></div>
-        <div class="segment" style="transform: rotate(16.875deg);"><span>蒙</span></div>
-        <!-- 繼續為所有64卦添加分段，按照 360度 / 64 = 5.625度 分佈 -->
-        <div class="segment" style="transform: rotate(354.375deg);"><span>未濟</span></div>
+          <div class="container">
+    <div class="wheel" id="wheel">
+        <div class="wheel-option">1</div>
+        <div class="wheel-option">2</div>
+        <div class="wheel-option">3</div>
+        <div class="wheel-option">4</div>
+        <div class="wheel-option">5</div>
+        <div class="wheel-option">6</div>
+        <div class="wheel-option">7</div>
+        <div class="wheel-option">8</div>
     </div>
-    <button id="spinButton" class="spin-button" onclick="spinWheel()">轉盤開始</button>
+    <div class="pointer"></div>
+    <button id="spinButton">開始</button>
+    <div id="result"></div>
 </div>
 
-<p id="result"></p>
-<p id="description"></p>
-
-
 <style>
-/* 轉盤容器 */
-.wheel-container {
-    position: relative;
-    width: 300px;
-    height: 300px;
-    margin: 0 auto;
-}
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
 
-/* 轉盤 */
-.wheel {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    border: 5px solid #ddd;
-    overflow: hidden;
-    transform: rotate(0deg);
-}
+    body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #f0f0f0;
+    }
 
-/* 扇形區塊，每個選項是一個扇形 */
-.segment {
-    position: absolute;
-    width: 50%;
-    height: 50%;
-    background-color: #f4b400;
-    clip-path: polygon(100% 0%, 0% 100%, 100% 100%);
-    transform-origin: 100% 100%;
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 12px;
-    color: #000;
-    border-right: 1px solid #fff;
-}
+    .container {
+        position: relative;
+    }
 
-/* 控制扇形內的文字 */
-.segment span {
-    transform: rotate(-45deg); /* 讓文字垂直對齊 */
-    display: block;
-    width: 60px;
-    text-align: center;
-}
+    .wheel {
+        width: 300px;
+        height: 300px;
+        border-radius: 50%;
+        border: 10px solid #333;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+    }
 
-/* 轉盤中心的按鈕 */
-.spin-button {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 20px;
-    font-size: 16px;
-    cursor: pointer;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 50%;
-}
+    .wheel-option {
+        position: absolute;
+        width: 50%;
+        height: 50%;
+        transform-origin: 100% 100%;
+        text-align: center;
+        line-height: 50px;
+        font-weight: bold;
+        color: white;
+    }
 
-.spin-button:hover {
-    background-color: #45a049;
-}
+    .wheel-option:nth-child(1) { transform: rotate(0deg) translate(150px); background-color: #f00; }
+    .wheel-option:nth-child(2) { transform: rotate(45deg) translate(150px); background-color: #f80; }
+    .wheel-option:nth-child(3) { transform: rotate(90deg) translate(150px); background-color: #ff0; }
+    .wheel-option:nth-child(4) { transform: rotate(135deg) translate(150px); background-color: #0f0; }
+    .wheel-option:nth-child(5) { transform: rotate(180deg) translate(150px); background-color: #0ff; }
+    .wheel-option:nth-child(6) { transform: rotate(225deg) translate(150px); background-color: #00f; }
+    .wheel-option:nth-child(7) { transform: rotate(270deg) translate(150px); background-color: #f0f; }
+    .wheel-option:nth-child(8) { transform: rotate(315deg) translate(150px); background-color: #800; }
 
+    .pointer {
+        width: 0;
+        height: 0;
+        border-left: 20px solid transparent;
+        border-right: 20px solid transparent;
+        border-bottom: 40px solid #333;
+        position: absolute;
+        top: -50px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    button {
+        margin-top: 20px;
+        padding: 10px 20px;
+        font-size: 16px;
+    }
+
+    #result {
+        margin-top: 20px;
+        font-size: 20px;
+        font-weight: bold;
+    }
 </style>
 
+
+
 <script>
-    const guaData = [
-        { name: "乾", description: "乾卦：象徵強健、領導力和創造力。" },
-        { name: "坤", description: "坤卦：象徵大地、包容和承載能力。" },
-        { name: "屯", description: "屯卦：象徵艱難開始，困難中孕育成功。" },
-        // ...繼續為所有卦添加描述...
-        { name: "未濟", description: "未濟卦：象徵尚未完成，仍需繼續努力以達到最終目標。" }
-    ];
+    const wheel = document.getElementById('wheel');
+    const resultDiv = document.getElementById('result');
+    const spinButton = document.getElementById('spinButton');
+    const options = ['1', '2', '3', '4', '5', '6', '7', '8'];
 
-    function spinWheel() {
-        const wheel = document.getElementById("wheel");
-        const randomDegree = Math.floor(Math.random() * 3600) + 360; // 隨機角度，確保旋轉多圈
+    let isSpinning = false;
 
-        // 旋轉轉盤
-        wheel.style.transition = "transform 4s ease-out"; // 4秒旋轉效果
-        wheel.style.transform = `rotate(${randomDegree}deg)`; // 旋轉角度
+    spinButton.addEventListener('click', () => {
+        if (isSpinning) return;  // 防止在轉盤運行時再次點擊
+        isSpinning = true;
+        
+        const randomSpin = Math.floor(Math.random() * 3600) + 360;  // 隨機旋轉角度
+        const duration = 5000;  // 旋轉持續時間
 
-        // 當旋轉結束後顯示結果
+        wheel.style.transition = `transform ${duration}ms ease-out`;
+        wheel.style.transform = `rotate(${randomSpin}deg)`;
+
         setTimeout(() => {
-            const selectedIndex = Math.floor(randomDegree % 360 / (360 / guaData.length)); // 根據最終位置計算選擇的卦
-            const selectedGua = guaData[selectedIndex];
-
-            // 顯示選中的卦和描述
-            document.getElementById("result").innerText = "結果：" + selectedGua.name;
-            document.getElementById("description").innerText = "描述：" + selectedGua.description;
-        }, 4000); // 4秒之後顯示結果，與旋轉時間同步
-    }
+            const selectedOptionIndex = Math.floor(((randomSpin % 360) / 360) * options.length);
+            const selectedOption = options[options.length - 1 - selectedOptionIndex];  // 選取最後停下來的選項
+            resultDiv.textContent = `結果: ${selectedOption}`;
+            isSpinning = false;
+        }, duration);
+    });
 </script>
-
 
 
 
@@ -377,7 +382,6 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#title-%E6%98%93%E7%B6%9364%E5%8D%A6%E8%BD%89%E7%9B%A4"><span class="nav-number">1.</span> <span class="nav-text">title: 易經64卦轉盤</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
