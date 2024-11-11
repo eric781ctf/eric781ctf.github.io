@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"eric781ctf.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="今天要來嘗試看看使用 RAG 幫我快速摘要電子書！！！網路上對 RAG 有層出不窮的應用和部署方式，今天我會使用 LangChain 作為框架、LlamaCpp 作為接口、ChromaDB 儲存文件向量。這個時做的核心是 LangChain，它有各式各樣的接口可以將 LLM 模型與其他工具連接，但現在 LangChain 更新非常快，很多 method 會隨之改變，但在執行時也會有提示說明那些 m">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在 Mac 上做自己的 RAG">
+<meta property="og:url" content="https://eric781ctf.github.io/2024/11/11/mac-LLM-RAG/index.html">
+<meta property="og:site_name" content="Eric&#39;s learning blog">
+<meta property="og:description" content="今天要來嘗試看看使用 RAG 幫我快速摘要電子書！！！網路上對 RAG 有層出不窮的應用和部署方式，今天我會使用 LangChain 作為框架、LlamaCpp 作為接口、ChromaDB 儲存文件向量。這個時做的核心是 LangChain，它有各式各樣的接口可以將 LLM 模型與其他工具連接，但現在 LangChain 更新非常快，很多 method 會隨之改變，但在執行時也會有提示說明那些 m">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2024-11-11T13:22:41.000Z">
+<meta property="article:modified_time" content="2024-11-11T14:21:10.764Z">
+<meta property="article:author" content="Eric">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="LLM">
+<meta property="article:tag" content="LangChain">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://eric781ctf.github.io/2024/11/11/mac-LLM-RAG/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-TW'
+  };
+</script>
+
+  <title>在 Mac 上做自己的 RAG | Eric's learning blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<style>.darkmode--activated{--body-bg-color:#282828;--content-bg-color:#333;--card-bg-color:#555;--text-color:#ccc;--blockquote-color:#bbb;--link-color:#ccc;--link-hover-color:#eee;--brand-color:#ddd;--brand-hover-color:#ddd;--table-row-odd-bg-color:#282828;--table-row-hover-bg-color:#363636;--menu-item-bg-color:#555;--btn-default-bg:#222;--btn-default-color:#ccc;--btn-default-border-color:#555;--btn-default-hover-bg:#666;--btn-default-hover-color:#ccc;--btn-default-hover-border-color:#666;--highlight-background:#282b2e;--highlight-foreground:#a9b7c6;--highlight-gutter-background:#34393d;--highlight-gutter-foreground:#9ca9b6}.darkmode--activated img{opacity:.75}.darkmode--activated img:hover{opacity:.9}.darkmode--activated code{color:#69dbdc;background:0 0}button.darkmode-toggle{z-index:9999}.darkmode-ignore,img{display:flex!important}.beian img{display:inline-block!important}</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Eric's learning blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">一隻亂跑的羊</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔<span class="badge">6</span></a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>關於</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">10</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分類<span class="badge">3</span></a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>網站地圖</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://eric781ctf.github.io/2024/11/11/mac-LLM-RAG/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/account.jpg">
+      <meta itemprop="name" content="Eric">
+      <meta itemprop="description" content="一個紀錄亂點技能樹的地方">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Eric's learning blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          在 Mac 上做自己的 RAG
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">發表於</span>
+              
+
+              <time title="建立時間：2024-11-11 21:22:41 / 修改時間：22:21:10" itemprop="dateCreated datePublished" datetime="2024-11-11T21:22:41+08:00">2024-11-11</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分類於</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AF%A6%E4%BD%9C/" itemprop="url" rel="index"><span itemprop="name">實作</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>今天要來嘗試看看使用 RAG 幫我快速摘要電子書！！！<br>網路上對 RAG 有層出不窮的應用和部署方式，今天我會使用 LangChain 作為框架、LlamaCpp 作為接口、ChromaDB 儲存文件向量。<br>這個時做的核心是 LangChain，它有各式各樣的接口可以將 LLM 模型與其他工具連接，但現在 LangChain 更新非常快，很多 method 會隨之改變，但在執行時也會有提示說明那些 method 改版了、該如何使用，所以不用太擔心！</p>
+<span id="more"></span>
+
+<p>以下是今天會用到的工具：</p>
+<ol>
+<li>API：LlamaCpp</li>
+<li>Framework：LangChain</li>
+<li>VectorDB：ChromaDB</li>
+<li>Embedding：sentence-Tranformers</li>
+<li>LLM：llama 3.1 8B</li>
+</ol>
+<h1 id="環境設置"><a href="#環境設置" class="headerlink" title="環境設置"></a>環境設置</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">python==3.9</span><br><span class="line">langchain</span><br><span class="line">pypdf</span><br><span class="line">chromadb</span><br><span class="line">sentence-transformers</span><br><span class="line">llama-cpp-python</span><br></pre></td></tr></table></figure>
+
+<h1 id="讀取文件並存入資料庫"><a href="#讀取文件並存入資料庫" class="headerlink" title="讀取文件並存入資料庫"></a>讀取文件並存入資料庫</h1><p>RAG 就是 LLM 的圖書館，我們要把外部的資料不論是 PDF、CSV、JSON 等等進行處理後存入向量資料庫供 LLM 查詢</p>
+<h2 id="文件載入"><a href="#文件載入" class="headerlink" title="文件載入"></a>文件載入</h2><p>LangChain 提供了超多種的文件載入器，可以參考<a target="_blank" rel="noopener" href="https://python.langchain.com/v0.1/docs/modules/data_connection/document_loaders/">官網</a>，包含 CSV, PDF, JSON, HTML, Markdown… 等。因為我想存 PDF 和 HTML 的資料進入資料庫，所以以下會示範讀取 PDF 和 HTML 的方法</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">from langchain_community.document_loaders import PyPDFLoader</span><br><span class="line">from langchain_community.document_loaders import UnstructuredHTMLLoader</span><br><span class="line"></span><br><span class="line">def read_HTML(path):</span><br><span class="line">    loader = UnstructuredHTMLLoader(file_path)</span><br><span class="line">    doc_data = loader.load()</span><br><span class="line">    return doc_data</span><br><span class="line"></span><br><span class="line">def read_PDF(path):</span><br><span class="line">    loader = PyPDFLoader(file_path)</span><br><span class="line">    doc_data = loader.load()</span><br><span class="line">    return doc_data</span><br></pre></td></tr></table></figure>
+
+<h2 id="Text-splitter-分割"><a href="#Text-splitter-分割" class="headerlink" title="Text splitter 分割"></a>Text splitter 分割</h2><p>Text splitter 的主要功能就是將文件或文字分割成多個 chunk，預防文件的資訊超過 LLM 限制的 tokens。<br>這步驟常用的工具有 <code>RecursiveCharacterTextSplitter</code> 和 <code>CharacterTextSplitter</code>，差別在於如果區塊大小超過指定閾值， <code>RecursiveCharacterTextSplitter</code> 會遞迴地分割成更小的區塊。LangChain 兩種方式皆有提供，主要參數：</p>
+<ul>
+<li>chunk_size：決定每個 chunk 的大小或長度。</li>
+<li>chunk_overlap：決定前一個 chunk 有多少字元應重複被包含在下一個 chunk 中。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">from langchain.text_splitter import RecursiveCharacterTextSplitter</span><br><span class="line"></span><br><span class="line">text_splitter = RecursiveCharacterTextSplitter(chunk_size=100, chunk_overlap=5)</span><br><span class="line"></span><br><span class="line"># doc_data：Result from read_HTML() or read_PDF()</span><br><span class="line">all_splits = text_splitter.split_documents(doc_data) </span><br></pre></td></tr></table></figure>
+
+<h2 id="載入-Embedding-model"><a href="#載入-Embedding-model" class="headerlink" title="載入 Embedding model"></a>載入 Embedding model</h2><p>要怎麼讓 LLM 知道文件的內容呢？這邊就要使用 NLP 領域中常用的 text embedding 也就是文字轉向量。<br>這裡要把 chunk 裡面的文字轉成向量，而優秀的 LangChain 提供我們許多 Embedding model 的接口，如OpenAI、Hugging Face、Nvidia…等（<a target="_blank" rel="noopener" href="https://python.langchain.com/docs/integrations/text_embedding/">官網</a>）。</p>
+<p>今天！我要來點 Hugging Face 的 Sentence Transformers！</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">from langchain_huggingface import HuggingFaceEmbeddings</span><br><span class="line"></span><br><span class="line">model_name = &quot;sentence-transformers/all-MiniLM-L6-v2&quot;</span><br><span class="line">model_kwargs = &#123;&#x27;device&#x27;: &#x27;mps&#x27;&#125;</span><br><span class="line">embedding = HuggingFaceEmbeddings(model_name=model_name,</span><br><span class="line">                                  model_kwargs=model_kwargs)</span><br></pre></td></tr></table></figure>
+
+<p>因為環境是設立在 MacOS 上，因此 <code>devices</code> 設 <code>mps</code>。</p>
+<h2 id="向量資料庫：ChromaDB"><a href="#向量資料庫：ChromaDB" class="headerlink" title="向量資料庫：ChromaDB"></a>向量資料庫：ChromaDB</h2><p>ChromaDB 的使用方式是給它載入的文件及我們要使用的 model，它會自動幫我們使用 model 將文字轉成向量後再進行儲存。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">from langchain_community.vectorstores import Chroma</span><br><span class="line"></span><br><span class="line">persist_directory = &#x27;db&#x27;</span><br><span class="line">vectordb = Chroma.from_documents(documents=all_splits, embedding=embedding, persist_directory=persist_directory)</span><br></pre></td></tr></table></figure>
+
+<h1 id="啟動-LLM-service"><a href="#啟動-LLM-service" class="headerlink" title="啟動 LLM service"></a>啟動 LLM service</h1><p>使用 LlamaCpp 的接口載入 model，它會幫你啟動 Llama 的服務。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">from langchain_community.llms import LlamaCpp</span><br><span class="line">from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler</span><br><span class="line"></span><br><span class="line">model_path = &quot;./Meta-Llama-3.1-8B-Instruct-f32.gguf&quot;</span><br><span class="line"></span><br><span class="line">llm = LlamaCpp(</span><br><span class="line">    model_path=model_path,</span><br><span class="line">    n_gpu_layers=100,</span><br><span class="line">    n_batch=512,</span><br><span class="line">    n_ctx=2048,</span><br><span class="line">    f16_kv=True,</span><br><span class="line">    callback_manager=CallbackManager([StreamingStdOutCallbackHandler()]),</span><br><span class="line">    verbose=True,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">llm(&quot;What is Taiwan known for?&quot;)</span><br></pre></td></tr></table></figure>
+
+<h1 id="System-Prompt-設定"><a href="#System-Prompt-設定" class="headerlink" title="System Prompt 設定"></a>System Prompt 設定</h1><p>使用 <code>ConditionalPromptSelector</code> 根據模型類型設定 Prompt：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">from langchain.chains import LLMChain</span><br><span class="line">from langchain.chains.prompt_selector import ConditionalPromptSelector</span><br><span class="line">from langchain.prompts import PromptTemplate</span><br><span class="line"></span><br><span class="line">DEFAULT_LLAMA_SEARCH_PROMPT = PromptTemplate(</span><br><span class="line">    input_variables=[&quot;question&quot;],</span><br><span class="line">    template=&quot;&quot;&quot;&lt;&lt;SYS&gt;&gt; \n 您是一個以中文為母語的行政助理，負責準確的回覆使用者 \</span><br><span class="line">提出的問題。 \n &lt;&lt;/SYS&gt;&gt; \n&quot;&quot;&quot;,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">DEFAULT_SEARCH_PROMPT = PromptTemplate(</span><br><span class="line">    input_variables=[&quot;question&quot;],</span><br><span class="line">    template=&quot;&quot;&quot;&lt;&lt;SYS&gt;&gt; \n 您是一個以中文為母語的行政助理，負責準確的回覆使用者 \</span><br><span class="line">提出的問題。 \n &lt;&lt;/SYS&gt;&gt; \n&quot;&quot;&quot;,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">QUESTION_PROMPT_SELECTOR = ConditionalPromptSelector(</span><br><span class="line">    default_prompt=DEFAULT_SEARCH_PROMPT,</span><br><span class="line">    conditionals=[(lambda llm: isinstance(llm, LlamaCpp), DEFAULT_LLAMA_SEARCH_PROMPT)],</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">prompt = QUESTION_PROMPT_SELECTOR.get_prompt(llm)</span><br></pre></td></tr></table></figure>
+
+<p>接著，使用 LLMChain 將 prompt 導入 llm。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">llm_chain = LLMChain(prompt=prompt, llm=llm)</span><br><span class="line">question = &quot;Where is Taipei 101?&quot;</span><br><span class="line">llm_chain.invoke(&#123;&quot;question&quot;: question&#125;)</span><br></pre></td></tr></table></figure>
+
+<h1 id="Text-Retrieval-Query-LLM"><a href="#Text-Retrieval-Query-LLM" class="headerlink" title="Text Retrieval + Query LLM"></a>Text Retrieval + Query LLM</h1><p>在前面幾節中，我們將外部的文件轉向量後匯入向量資料庫內，並且啟動了 LLM，接下來則要將整個 RAG 的流程串起來：</p>
+<ol>
+<li>使用者提問</li>
+<li>向量資料庫進行 Text Retrieval</li>
+<li>結合 QA 與 Text Retrieval 後轉送給 LLM</li>
+<li>LLM 根據資訊回答</li>
+</ol>
+<p>首先，創建 Retriever，它可以根據非結構化的 QA 返回相應文件，<a target="_blank" rel="noopener" href="https://python.langchain.com/docs/integrations/retrievers/">LangChain</a> 提供了很多種方式，也整合進第三方的工具。直到目前也有仍舊有很多研究在探討如何根據 QA 更準確地只到對應的文件。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">from langchain.chains import RetrievalQA</span><br><span class="line">retriever = vectordb.as_retriever()</span><br><span class="line"></span><br><span class="line">qa = RetrievalQA.from_chain_type(</span><br><span class="line">    llm=llm, </span><br><span class="line">    chain_type=&quot;stuff&quot;, </span><br><span class="line">    retriever=retriever, </span><br><span class="line">    verbose=True</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>接著，就是至關重要的一步，提問啦！</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">query = &quot;咖啡豆烘培有哪些分類？&quot;</span><br><span class="line">qa.invoke(query)</span><br></pre></td></tr></table></figure>
+
+<h1 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h1><p>LangChain 真的是 LLM 開源社群使用者的一大福音，整合了各種 LLM 服務開發會使用到的工具，讓個人探索性的嘗試更加容易，也可以加速開發團隊的工作效率。<br>今天我使用到的套件都只是其中的冰山一角，做出來的成果雖然仍不如預期，但除了 LLM model 本身的原因以外，個人的 prompt 也或許要更加精準，就如同我們日常對 GPT 4o 的提問一樣。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/LLM/" rel="tag"># LLM</a>
+              <a href="/tags/LangChain/" rel="tag"># LangChain</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2024/10/15/learning-unit-test/" rel="prev" title="【學習紀錄】Unit test">
+      <i class="fa fa-chevron-left"></i> 【學習紀錄】Unit test
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          網站概要
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%92%B0%E5%A2%83%E8%A8%AD%E7%BD%AE"><span class="nav-number">1.</span> <span class="nav-text">環境設置</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%80%E5%8F%96%E6%96%87%E4%BB%B6%E4%B8%A6%E5%AD%98%E5%85%A5%E8%B3%87%E6%96%99%E5%BA%AB"><span class="nav-number">2.</span> <span class="nav-text">讀取文件並存入資料庫</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E8%BC%89%E5%85%A5"><span class="nav-number">2.1.</span> <span class="nav-text">文件載入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Text-splitter-%E5%88%86%E5%89%B2"><span class="nav-number">2.2.</span> <span class="nav-text">Text splitter 分割</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BC%89%E5%85%A5-Embedding-model"><span class="nav-number">2.3.</span> <span class="nav-text">載入 Embedding model</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%91%E9%87%8F%E8%B3%87%E6%96%99%E5%BA%AB%EF%BC%9AChromaDB"><span class="nav-number">2.4.</span> <span class="nav-text">向量資料庫：ChromaDB</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%95%9F%E5%8B%95-LLM-service"><span class="nav-number">3.</span> <span class="nav-text">啟動 LLM service</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#System-Prompt-%E8%A8%AD%E5%AE%9A"><span class="nav-number">4.</span> <span class="nav-text">System Prompt 設定</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Text-Retrieval-Query-LLM"><span class="nav-number">5.</span> <span class="nav-text">Text Retrieval + Query LLM</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AA%9E"><span class="nav-number">6.</span> <span class="nav-text">結語</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Eric"
+      src="/images/account.jpg">
+  <p class="site-author-name" itemprop="name">Eric</p>
+  <div class="site-description" itemprop="description">一個紀錄亂點技能樹的地方</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/eric781ctf" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;eric781ctf" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:eric773dfl@gmail.com" title="E-Mail → mailto:eric773dfl@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.instagram.com/sheep_eric_0508" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;sheep_eric_0508" rel="noopener" target="_blank"><i class="fab fa-instagram fa-fw"></i>Instagram</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-ghost"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Eric</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 強力驅動
+  </div>
+
+
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+<script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
+
+<script>
+var options = {
+  bottom: '64px',
+  right: 'unset',
+  left: '32px',
+  time: '0.5s',
+  mixColor: '＃7B68EE',
+  backgroundColor: 'transparent',
+  buttonColorDark: '#100f2c',
+  buttonColorLight: '#fff',
+  saveInCookies: true,
+  label: '🌓',
+  autoMatchOsTheme: true
+}
+const darkmode = new Darkmode(options);
+window.darkmode = darkmode;
+darkmode.showWidget();
+</script>
+
+</body>
+</html>
