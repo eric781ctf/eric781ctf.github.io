@@ -28,7 +28,7 @@
 <meta property="og:description" content="今天要來嘗試看看使用 RAG 幫我快速摘要電子書！！！網路上對 RAG 有層出不窮的應用和部署方式，今天我會使用 LangChain 作為框架、LlamaCpp 作為接口、ChromaDB 儲存文件向量。這個實作的核心是 LangChain，它有各式各樣的接口可以將 LLM 模型與其他工具連接，但現在 LangChain 更新非常快，很多 method 會隨之改變，但在執行時也會有提示說明那些 m">
 <meta property="og:locale" content="zh_TW">
 <meta property="article:published_time" content="2024-11-11T13:22:41.000Z">
-<meta property="article:modified_time" content="2024-11-11T15:03:31.608Z">
+<meta property="article:modified_time" content="2024-11-12T01:39:49.213Z">
 <meta property="article:author" content="Eric">
 <meta property="article:tag" content="Python">
 <meta property="article:tag" content="LLM">
@@ -197,10 +197,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">發表於</span>
-              
 
-              <time title="建立時間：2024-11-11 21:22:41 / 修改時間：23:03:31" itemprop="dateCreated datePublished" datetime="2024-11-11T21:22:41+08:00">2024-11-11</time>
+              <time title="建立時間：2024-11-11 21:22:41" itemprop="dateCreated datePublished" datetime="2024-11-11T21:22:41+08:00">2024-11-11</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新於</span>
+                <time title="修改時間：2024-11-12 09:39:49" itemprop="dateModified" datetime="2024-11-12T09:39:49+08:00">2024-11-12</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -250,7 +256,7 @@
 <p>今天！我要來點 Hugging Face 的 Sentence Transformers！</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">from langchain_huggingface import HuggingFaceEmbeddings</span><br><span class="line"></span><br><span class="line">model_name = &quot;sentence-transformers/all-MiniLM-L6-v2&quot;</span><br><span class="line">model_kwargs = &#123;&#x27;device&#x27;: &#x27;mps&#x27;&#125;</span><br><span class="line">embedding = HuggingFaceEmbeddings(model_name=model_name,</span><br><span class="line">                                  model_kwargs=model_kwargs)</span><br></pre></td></tr></table></figure>
 
-<p>因為環境是設立在 MacOS 上，因此 <code>devices</code> 設 <code>mps</code>。</p>
+<p>因為環境是設立在 MacOS 上，<code>mps</code> 是 MacOS 系統替代 CUDA 的方式，因此 <code>devices</code> 設 <code>mps</code>（不同作業環境和硬體配置可分別設 <code>cpu</code> 或是 <code>cuda</code>）。</p>
 <h2 id="向量資料庫：ChromaDB"><a href="#向量資料庫：ChromaDB" class="headerlink" title="向量資料庫：ChromaDB"></a>向量資料庫：ChromaDB</h2><p>ChromaDB 的使用方式是給它載入的文件及我們要使用的 model，它會自動幫我們使用 model 將文字轉成向量後再進行儲存。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">from langchain_community.vectorstores import Chroma</span><br><span class="line"></span><br><span class="line">persist_directory = &#x27;db&#x27;</span><br><span class="line">vectordb = Chroma.from_documents(documents=all_splits, embedding=embedding, persist_directory=persist_directory)</span><br></pre></td></tr></table></figure>
 
