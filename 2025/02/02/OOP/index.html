@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"eric781ctf.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="今天來複習一下在過去求學經歷中和工作中都有同學或同事覺得複雜的物件導向程式設計（Object-oriented Programming, OOP）。OOP 是程式設計典範 (Programming paradigms) 的其中一種，還有諸如函式程式設計（Functional Programming）、程序式程式設計（Procedural Programming）…等等。而值得注意的是，這些典範在使">
+<meta property="og:type" content="article">
+<meta property="og:title" content="物件導向程式設計（OOP）">
+<meta property="og:url" content="https://eric781ctf.github.io/2025/02/02/OOP/index.html">
+<meta property="og:site_name" content="Eric&#39;s learning blog">
+<meta property="og:description" content="今天來複習一下在過去求學經歷中和工作中都有同學或同事覺得複雜的物件導向程式設計（Object-oriented Programming, OOP）。OOP 是程式設計典範 (Programming paradigms) 的其中一種，還有諸如函式程式設計（Functional Programming）、程序式程式設計（Procedural Programming）…等等。而值得注意的是，這些典範在使">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2025-02-02T11:05:49.000Z">
+<meta property="article:modified_time" content="2025-02-02T11:06:23.047Z">
+<meta property="article:author" content="Eric">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="物件導向 OOP">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://eric781ctf.github.io/2025/02/02/OOP/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-TW'
+  };
+</script>
+
+  <title>物件導向程式設計（OOP） | Eric's learning blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<style>.darkmode--activated{--body-bg-color:#282828;--content-bg-color:#333;--card-bg-color:#555;--text-color:#ccc;--blockquote-color:#bbb;--link-color:#ccc;--link-hover-color:#eee;--brand-color:#ddd;--brand-hover-color:#ddd;--table-row-odd-bg-color:#282828;--table-row-hover-bg-color:#363636;--menu-item-bg-color:#555;--btn-default-bg:#222;--btn-default-color:#ccc;--btn-default-border-color:#555;--btn-default-hover-bg:#666;--btn-default-hover-color:#ccc;--btn-default-hover-border-color:#666;--highlight-background:#282b2e;--highlight-foreground:#a9b7c6;--highlight-gutter-background:#34393d;--highlight-gutter-foreground:#9ca9b6}.darkmode--activated img{opacity:.75}.darkmode--activated img:hover{opacity:.9}.darkmode--activated code{color:#69dbdc;background:0 0}button.darkmode-toggle{z-index:9999}.darkmode-ignore,img{display:flex!important}.beian img{display:inline-block!important}</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Eric's learning blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">一隻亂跑的羊</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔<span class="badge">7</span></a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>關於</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">11</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分類<span class="badge">3</span></a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>網站地圖</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://eric781ctf.github.io/2025/02/02/OOP/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/account.jpg">
+      <meta itemprop="name" content="Eric">
+      <meta itemprop="description" content="一個紀錄亂點技能樹的地方">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Eric's learning blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          物件導向程式設計（OOP）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">發表於</span>
+              
+
+              <time title="建立時間：2025-02-02 19:05:49 / 修改時間：19:06:23" itemprop="dateCreated datePublished" datetime="2025-02-02T19:05:49+08:00">2025-02-02</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分類於</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%B8%E7%BF%92%E7%B4%80%E9%8C%84/" itemprop="url" rel="index"><span itemprop="name">學習紀錄</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>今天來複習一下在過去求學經歷中和工作中都有同學或同事覺得複雜的物件導向程式設計（Object-oriented Programming, OOP）。OOP 是程式設計典範 (Programming paradigms) 的其中一種，還有諸如函式程式設計（Functional Programming）、程序式程式設計（Procedural Programming）…等等。而值得注意的是，這些典範在使用上並非互斥，而是針對相同、或不同問題而產生出來的解決方法。同時，沒有絕對完美的設計典範，也不是何種問題只能依賴特定的典範來解決，面對一個問題的時候，只有相對適合的方法，就看當下我們或是專案架構統一想要採用哪種方式來解決問題。</p>
+<p>本文會以<code>Python</code>作為範例語言進行實作。</p>
+<span id="more"></span>
+
+<h1 id="什麼是-OOP？"><a href="#什麼是-OOP？" class="headerlink" title="什麼是 OOP？"></a>什麼是 OOP？</h1><p>核心概念就是「模擬真實世界的事物，並定義其屬性及操作方法」。物件（object）本身包含「資料」和「方法」，以現實世界來說「資料」就是資訊、特徵、屬性、定義，而「方法」就是該物件和其他事物的互動方式。</p>
+<p>舉例有個物件是汽車，他的資料包含：</p>
+<ul>
+<li>廠牌：Toyota</li>
+<li>車型：INNOVA</li>
+<li>出廠年份：2018</li>
+<li>里程數：15000</li>
+<li>排氣量：1998cc</li>
+<li>油箱容量：55L</li>
+<li>…</li>
+</ul>
+<p>汽車的互動方法包含：</p>
+<ul>
+<li>行駛</li>
+<li>轉彎</li>
+<li>頭燈啟用</li>
+<li>…</li>
+</ul>
+<p>可以看到資料以「屬性」和「值」的方式對應出現。另外，「值」通常是有單位的，才能表示他的意義。例如油箱容量是公升而非毫升。而若今天沒有單位，可能就不知道是55公升還是55毫升。</p>
+<p>開頭有提到，其實有多種不同的程式設計典範，可以處理各種問題。每個典範都有他的優缺與適用情境，然而「物件導向程式設計」還是被廣為使用和討論，因為它在面對現實世界複雜問題的時候，有比較好的維護性、擴展性和重複使用性。另外也是整理收納，隱藏程式細節，並且只提供清楚的應用方法，讓主程式變得簡潔，大幅提高可讀性。當然，他也是有缺點的，例如程式碼規模相對較大，需要投入較多的時間和心力去建構。</p>
+<p>接著會介紹 OOP 常提到的</p>
+<ul>
+<li>概念：類別、介面</li>
+<li>特徵：封裝、抽象、繼承、多型</li>
+</ul>
+<h1 id="物件和類別（Object-and-Class）"><a href="#物件和類別（Object-and-Class）" class="headerlink" title="物件和類別（Object and Class）"></a>物件和類別（Object and Class）</h1><h2 id="嘗試定義類別並建立物件"><a href="#嘗試定義類別並建立物件" class="headerlink" title="嘗試定義類別並建立物件"></a>嘗試定義類別並建立物件</h2><p>在上一章中，我們提到可以使用物件來模擬真實世界的事物，接著就來嘗試建立幾個汽車的物件吧！</p>
+<p>我們先定義一個汽車的 class，其中屬性包含車主名稱<code>owner</code>、油箱總容量<code>fuel_capacity</code>、現在的油箱容量<code>fuel</code>、車牌<code>license_plate</code>，以及一個方法<code>drive</code>。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">class Car:</span><br><span class="line">    def __init__(self, owner, fuel_capacity, fuel, license_plate):</span><br><span class="line">        self.owner = owner</span><br><span class="line">        self.fuel_capacity = fuel_capacity</span><br><span class="line">        self.fuel = fuel</span><br><span class="line">        self.license_plate = license_plate</span><br><span class="line"></span><br><span class="line">    def drive(self, km):</span><br><span class="line">        # 每公升可以行駛 10 km</span><br><span class="line">        cost = km/10</span><br><span class="line">        if self.fuel - cost &gt; 0:</span><br><span class="line">            self.fuel = self.fuel - cost</span><br><span class="line">            return f&quot;還有&#123;self.fuel&#125;公升的油&quot;</span><br><span class="line">        else:</span><br><span class="line">            return f&quot;油箱只剩&#123;self.fuel&#125;公升的油，跑不了&#123;km&#125;公里。&quot;</span><br></pre></td></tr></table></figure>
+
+<p>接著，我們就可以透過定義好的類別建立幾台汽車物件。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Bob_car = Car(&#x27;Bob&#x27;, 55, 55, &quot;AAA-8888&quot;)</span><br><span class="line">Alice_car = Car(&#x27;Alice&#x27;, 50, 1, &#x27;APT-1234&#x27;)</span><br></pre></td></tr></table></figure>
+
+<p>最後，我們嘗試呼叫方法<code>drive</code>。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Bob_car.drive(30)    # 輸出：還有52.0公升的油</span><br><span class="line">Alice_car.drive(30)  # 輸出：油箱只剩1公升的油，跑不了30公里。</span><br></pre></td></tr></table></figure>
+
+<p>類別（class）是一種程式碼的範本，可以用來建立物件、描述屬性與方法，以及提供初始狀態。上面的範例中，我們定義了<code>Car</code>應該要有的屬性和方法。</p>
+<h2 id="「繼承」類別"><a href="#「繼承」類別" class="headerlink" title="「繼承」類別"></a>「繼承」類別</h2><p>除了自己親手建立一個新的類別之外，我們也可以透過「繼承」的方式，讓新的類別承接已有的類別屬性或方法。</p>
+<p>例如，我們有一個需求要建立一個機車的類別，他除了要有基本<code>Car</code>的屬性和方法之外，還要新增一個是否配戴安全帽（<code>helmet</code>）的屬性和戴上安全帽（<code>wear_helmet</code>）的方法。所以這裡我們建立<code>Motorcycle</code>類別，然後用<code>super().__init__</code>繼承<code>Car</code>為父類別。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">class Motorcycle(Car):</span><br><span class="line">    def __init__(self, owner, fuel_capacity, fuel, license_plate):</span><br><span class="line">        super().__init__(owner, fuel_capacity, fuel, license_plate)  # 呼叫父類別 Car 的初始化</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>接著，新增屬性及方法。<br>請注意，若<code>Motorcycle</code>子類別並未預設<code>helmet=False</code>，則建立子類別時，必須填上5個變數，而非原本父類<code>Car</code>的4個。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">class Motorcycle(Car):</span><br><span class="line">    def __init__(self, owner, fuel_capacity, fuel, license_plate, helmet=False):  # 若沒有給定初始狀態則視為沒戴安全帽</span><br><span class="line">        super().__init__(owner, fuel_capacity, fuel, license_plate)  # 呼叫父類別 Car 的初始化</span><br><span class="line">        self.helmet = helmet</span><br><span class="line"></span><br><span class="line">    def wear_helmet(self):</span><br><span class="line">        if not self.helmet:</span><br><span class="line">            self.helmet = True</span><br><span class="line">            return &quot;戴上安全帽&quot;</span><br><span class="line">        else:</span><br><span class="line">            return &quot;你已經戴上安全帽了&quot;</span><br></pre></td></tr></table></figure>
+
+<p>之後，我們就可以用這個新的類別，來建立機車物件並讓騎士戴上安全帽！</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Bob_motorcycler = Motorcycle(&#x27;Bob&#x27;, 10, 7, &quot;KKK-123&quot;)</span><br><span class="line">Bob_motorcycler.wear_helmet()   # 輸出：戴上安全帽</span><br><span class="line"></span><br><span class="line">Alice_motorcycle = Motorcycle(&#x27;Alice&#x27;, 10, 8, &quot;GGG-456&quot;, True)</span><br><span class="line">Alice_motorcycle.wear_helmet()  # 輸出：你已經戴上安全帽了</span><br></pre></td></tr></table></figure>
+
+<h2 id="什麼是多型？"><a href="#什麼是多型？" class="headerlink" title="什麼是多型？"></a>什麼是多型？</h2><p>是指子類別繼承父類別的方法，但可能會有不一樣的處理方式。承上的例子，汽車和機車都可以行駛，但行駛的油耗並不相同。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">class Car:</span><br><span class="line">    def __init__(self, name, fuel):</span><br><span class="line">        self.name = name</span><br><span class="line">    def drive(self, km):</span><br><span class="line">        # 每公升可以行駛 10 km</span><br><span class="line">        cost = km/10</span><br><span class="line">        if self.fuel - cost &gt; 0:</span><br><span class="line">            self.fuel = self.fuel - cost</span><br><span class="line">            return f&quot;還有&#123;self.fuel&#125;公升的油。&quot;</span><br><span class="line">        else:</span><br><span class="line">            return f&quot;油箱只剩&#123;self.fuel&#125;公升的油，跑不了&#123;km&#125;公里。&quot;</span><br><span class="line"></span><br><span class="line">class Motorcycle(Car):</span><br><span class="line">    def drive(self, km):</span><br><span class="line">        # 每公升可以行駛 15 km</span><br><span class="line">        cost = km/15</span><br><span class="line">        if self.fuel - cost &gt; 0:</span><br><span class="line">            self.fuel = self.fuel - cost</span><br><span class="line">            return f&quot;還有&#123;self.fuel&#125;公升的油。&quot;</span><br><span class="line">        else:</span><br><span class="line">            return f&quot;油箱只剩&#123;self.fuel&#125;公升的油，跑不了&#123;km&#125;公里。&quot;</span><br><span class="line"></span><br><span class="line">Bob_car = Car(&quot;Bob&quot;, 1)</span><br><span class="line">Alice_motorcycle = Motorcycle(&quot;Alice&quot;, 1)</span><br><span class="line"></span><br><span class="line"># 呼叫方法，實際執行的方法取決於物件的類型</span><br><span class="line">Bob_car.drive(12)           # 輸出：油箱只剩1公升的油，跑不了12公里。</span><br><span class="line">Alice_motorcycle.drive(12)  # 輸出：還有0.2公升的油。</span><br></pre></td></tr></table></figure>
+
+
+
+
+<h2 id="為什麼要有類別？"><a href="#為什麼要有類別？" class="headerlink" title="為什麼要有類別？"></a>為什麼要有類別？</h2><p>類別能夠幫助我們快速建立相同類型的物件，節省了重複輸入的時間和心力，同時還有其他好處</p>
+<ul>
+<li>把「類似的事物」歸類成一類之後，未來能夠快速透過這個類別來建立這些物件</li>
+<li>如果已經有建立好的類別，那麼我們就可以直接使用，不需要自己建立物件、或重新建構一個類別</li>
+<li>如果要針對某一類的事物進行修改，那麼我們可以直接從類別下手修改，而不需要進入程式碼逐條修改</li>
+</ul>
+<p>這就很像生物學當中的「界門綱目科屬種」的層層分類方式，透過這種方式讓我們可以用結構化的方法撰寫程式碼。這也是OOP之所以較易於維護的原因之一。然而，若在建構程式碼時定義的分類方法不明確，則也會影響維護的方便性。</p>
+<h1 id="抽象類別"><a href="#抽象類別" class="headerlink" title="抽象類別"></a>抽象類別</h1><h2 id="奇怪的繼承"><a href="#奇怪的繼承" class="headerlink" title="奇怪的繼承"></a>奇怪的繼承</h2><p>上個段落的最後我們提到了分類的好壞會影響我們維護的困難度，例如<code>Motorcycle</code>繼承<code>Car</code>的父類別，而若是未來新增了直升機、遊艇並且也都繼承了<code>Car</code>，雖然實作出來的結果或許可以如預期，但是看起來就非常的奇怪，而且沒有邏輯。</p>
+<p>如果我們今天繼續充實<code>Car</code>類別，加入幾個門的屬性（四門汽車、雙門汽車），結果就會發現<code>Motorcycle</code>子類別也繼承了有幾個門的屬性，機車居然有門？！？！</p>
+<h2 id="子類別是父類別的其中一種"><a href="#子類別是父類別的其中一種" class="headerlink" title="子類別是父類別的其中一種"></a>子類別是父類別的其中一種</h2><p>雖然我們可以任意分類、抽取屬性和方法建立類別。任意的繼承某個父類別來取得需要的屬性和方法，但這樣的「分類整理」毫無邏輯也稱不上結構化，最終只會造成各種混亂和錯誤。所以通常在建立父類別和繼承的時候，會遵循著「子類別是父類別的其中一種」規則，例如</p>
+<ul>
+<li>機車是載具的一種</li>
+<li>汽車是載具的一種</li>
+<li>止痛藥是藥品的一種</li>
+<li>感冒藥是藥品的一種</li>
+<li>…</li>
+</ul>
+<p>這樣一來可以比較有結構的模擬現實世界的各種事物，也比較不會發生錯誤。</p>
+<h2 id="明確定義父類別"><a href="#明確定義父類別" class="headerlink" title="明確定義父類別"></a>明確定義父類別</h2><p>首先，整理一個<code>vehicle</code>作為父類別</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">class Vehicle:</span><br><span class="line">    def __init__(self, owner, license_plate, power_type, vehicle_type, engine):</span><br><span class="line">        self.owner = owner</span><br><span class="line">        self.license_plate = license_plate</span><br><span class="line">        self.power_type = power_type        # Oil / Electric power</span><br><span class="line">        self.vehicle_type = vehicle_type    # Land / Watercraft / Aircraft</span><br><span class="line">        self.engine = engine</span><br><span class="line">    </span><br><span class="line">    def start_engine(self):</span><br><span class="line">        if not self.engine:</span><br><span class="line">            self.engine = True</span><br><span class="line">            return &quot;啟動引擎&quot;</span><br><span class="line">        else:</span><br><span class="line">            return &quot;引擎早已啟動&quot;</span><br><span class="line">    </span><br><span class="line">    def stop_engine(self):</span><br><span class="line">        if not self.engine:</span><br><span class="line">            return &quot;引擎早已關閉&quot;</span><br><span class="line">        else:</span><br><span class="line">            self.engine = False</span><br><span class="line">            return &quot;引擎關閉&quot;</span><br></pre></td></tr></table></figure>
+
+<p>接著，讓 <code>Car</code> 和 <code>Motorcycle</code> 分別繼承他的屬性和方法。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">class Motorcycle(Vehicle):</span><br><span class="line">    def __init__(self, owner, license_plate, power_type, vehicle_type, engine=False, helmet=False):</span><br><span class="line">        super().__init__(owner, license_plate, power_type, vehicle_type)</span><br><span class="line">        self.engine = engine</span><br><span class="line">        self.helmet = helmet</span><br><span class="line"></span><br><span class="line">    def wear_helmet(self):</span><br><span class="line">        if not self.helmet:</span><br><span class="line">            self.helmet = True</span><br><span class="line">            return &quot;戴上安全帽&quot;</span><br><span class="line">        else:</span><br><span class="line">            return &quot;你已經戴上安全帽了&quot;</span><br><span class="line"></span><br><span class="line">class Car(Vehicle):</span><br><span class="line">    def __init__(self, owner, license_plate, power_type, vehicle_type, engine=False):</span><br><span class="line">        super().__init__(owner, license_plate, power_type, vehicle_type)</span><br><span class="line">        self.engine = engine</span><br></pre></td></tr></table></figure>
+
+<p>如此一來，<code>Car</code>和<code>Motorcycle</code>都可使用同樣的<code>start_engine</code>、<code>stop_engine</code>方法。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Bob_motorcycler = Motorcycle(&#x27;Bob&#x27;, &quot;KKK-123&quot;, &quot;Electric power&quot;, &quot;Land&quot;)</span><br><span class="line">Bob_motorcycler.wear_helmet()    # 輸出：戴上安全帽</span><br><span class="line">Bob_motorcycler.start_engine()   # 輸出：啟動引擎</span><br><span class="line"></span><br><span class="line">Alice_car = Car(&#x27;Alice&#x27;, &quot;GGG-456&quot;, &quot;Oil&quot;, &quot;Land&quot;, engine=True)</span><br><span class="line">Alice_car.start_engine()         # 輸出：引擎早已啟動</span><br><span class="line">Alice_car.stop_engine()          # 輸出：引擎關閉</span><br></pre></td></tr></table></figure>
+
+<h2 id="抽象類別-1"><a href="#抽象類別-1" class="headerlink" title="抽象類別"></a>抽象類別</h2><p>在我們充實父類別時，想新增一個<code>drive</code>，但這時候發現，因為法規的限制，機車不能上國道，而汽車也不能駛入機車專用道。這樣該怎麼在父類別進行定義呢？在其他程式語言裡面會使用介面（Interface）一種強制規範的類別，然而 python 中沒有這個類別，因此我們通常使用<code>abc</code>來建立這個功能。</p>
+<p>在<code>drive</code>方法上，我們用<code>@abstractmethod</code>裝飾器定義抽象方法（abstract method），主要目標是強制子類別必須實作這些方法，否則無法建立物件。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">from abc import ABC, abstractmethod</span><br><span class="line"></span><br><span class="line">class Vehicle(ABC):</span><br><span class="line">    def __init__(self, owner, license_plate, power_type, vehicle_type, engine=False):</span><br><span class="line">        self.owner = owner</span><br><span class="line">        self.license_plate = license_plate</span><br><span class="line">        self.power_type = power_type        # Oil / Electric power</span><br><span class="line">        self.vehicle_type = vehicle_type    # Land / Watercraft / Aircraft</span><br><span class="line">        self.engine = engine</span><br><span class="line">    </span><br><span class="line">    def start_engine(self):</span><br><span class="line">        if not self.engine:</span><br><span class="line">            self.engine = True</span><br><span class="line">            return &quot;啟動引擎&quot;</span><br><span class="line">        else:</span><br><span class="line">            return &quot;引擎早已啟動&quot;</span><br><span class="line">    </span><br><span class="line">    def stop_engine(self):</span><br><span class="line">        if not self.engine:</span><br><span class="line">            return &quot;引擎早已關閉&quot;</span><br><span class="line">        else:</span><br><span class="line">            self.engine = False</span><br><span class="line">            return &quot;引擎關閉&quot;</span><br><span class="line">        </span><br><span class="line">    @abstractmethod</span><br><span class="line">    def drive(self, km, road_type):</span><br><span class="line">        &quot;&quot;&quot;行駛&quot;&quot;&quot;</span><br><span class="line">        pass</span><br></pre></td></tr></table></figure>
+
+<p>強制子類別必須建立<code>drive</code>方法，可以避免實作過程中忽略而造成的 error，同時我們也可以依此建立各個子類別的<code>drive</code>方法，騎車要先戴安全帽、駕駛要注意道路是否可以行駛。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">class Motorcycle(Vehicle):</span><br><span class="line">    def __init__(self, owner, license_plate, power_type, vehicle_type, engine=False, helmet=False):</span><br><span class="line">        super().__init__(owner, license_plate, power_type, vehicle_type)</span><br><span class="line">        self.engine = engine</span><br><span class="line">        self.helmet = helmet</span><br><span class="line"></span><br><span class="line">    def wear_helmet(self):</span><br><span class="line">        if not self.helmet:</span><br><span class="line">            self.helmet = True</span><br><span class="line">            return &quot;戴上安全帽&quot;</span><br><span class="line">        else:</span><br><span class="line">            return &quot;你已經戴上安全帽了&quot;</span><br><span class="line">    </span><br><span class="line">    def drive(self, km, road_type):</span><br><span class="line">        if not self.helmet:</span><br><span class="line">            return &quot;請先戴上安全帽&quot;</span><br><span class="line">        if not self.engine_on:</span><br><span class="line">            return &quot;請先啟動引擎&quot;</span><br><span class="line">        if road_type==&#x27;高速公路&#x27;:</span><br><span class="line">            return &quot;該道路禁止機車行駛&quot;</span><br><span class="line">        else:</span><br><span class="line">            return &quot;行駛中&quot;</span><br><span class="line"></span><br><span class="line">class Car(Vehicle):</span><br><span class="line">    def __init__(self, owner, license_plate, power_type, vehicle_type, engine=False):</span><br><span class="line">        super().__init__(owner, license_plate, power_type, vehicle_type)</span><br><span class="line">        self.engine = engine</span><br><span class="line">    </span><br><span class="line">    def drive(self, km, road_type):</span><br><span class="line">        if not self.engine_on:</span><br><span class="line">            return &quot;請先啟動引擎&quot;</span><br><span class="line">        if road_type==&#x27;機車專用道路&#x27;:</span><br><span class="line">            return &quot;該道路禁止汽車行駛&quot;</span><br><span class="line">        else:</span><br><span class="line">            return &quot;行駛中&quot;</span><br></pre></td></tr></table></figure>
+
+<p>範例輸出如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Bob_motorcycler = Motorcycle(&#x27;Bob&#x27;, &quot;KKK-123&quot;, &quot;Electric power&quot;, &quot;Land&quot;)</span><br><span class="line">Bob_motorcycler.drive(10, &quot;高速公路&quot;)  # 輸出：請先戴上安全帽</span><br><span class="line"></span><br><span class="line">Alice_car = Car(&#x27;Alice&#x27;, &quot;GGG-456&quot;, &quot;Oil&quot;, &quot;Land&quot;, engine=True)</span><br><span class="line">Alice_car.drive(10, &quot;機車專用道路&quot;)    # 輸出：該道路禁止汽車行駛</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="封裝（Encapsulation）"><a href="#封裝（Encapsulation）" class="headerlink" title="封裝（Encapsulation）"></a>封裝（Encapsulation）</h1><p>封裝（Encapsulation）是OOP的核心概念之一。主要的目標是將屬性和方法封裝在類別內，並透過存取控制來確保資料不會被外部隨意修改。以前面的範例來說，<code>Vehicle</code>的<code>owner</code>、<code>license_plate</code>是可以在任意地方被手動修改的。現實世界來看，這是很不合理的，車牌和車輛擁有者是必須在指定單位申請後才能作變更登記，並不是隨時想改就能改的。</p>
+<p>這裡主要分享</p>
+<ul>
+<li>私有屬性(Private Attribute)</li>
+<li>私有方法(Private Method)</li>
+</ul>
+<h2 id="私有屬性-Private-Attribute"><a href="#私有屬性-Private-Attribute" class="headerlink" title="私有屬性(Private Attribute)"></a>私有屬性(Private Attribute)</h2><p>在類別中可以進行存取，而外部無法存取的屬性。使用方式就是在私有屬性前加上兩個底線(__)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">class Vehicle():</span><br><span class="line">    def __init__(self, owner, owner_id, license_plate):</span><br><span class="line">        self.owner = owner</span><br><span class="line">        self.__owner_id = owner_id</span><br><span class="line">        self.license_plate = license_plate</span><br><span class="line">        </span><br><span class="line">Bob_vehicle = Vehicle(&#x27;Bob&#x27;, &#x27;Z111111111&#x27;, &#x27;KKK-123&#x27;)</span><br><span class="line">print(Bob_vehicle.__owner_id)    # 輸出：AttributeError: &#x27;Vehicle&#x27; object has no attribute &#x27;__owner_id&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>從上面的範例可以看到，我們在類別外無法存取到類別中的<code>owner_id</code>私有屬性。但是Python不像其他程式語言真的把屬性或方法變為私有，事實上我們還是可以透過加上<code>_類別名稱</code>存取到私有屬性。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Bob_vehicle = Vehicle(&#x27;Bob&#x27;, &#x27;Z111111111&#x27;, &#x27;KKK-123&#x27;)</span><br><span class="line">print(Bob_vehicle._Vehicle__owner_id) # 輸出：Z111111111</span><br></pre></td></tr></table></figure>
+
+<p>所以在類別中的屬性或方法加上兩個底線(__)主要是告知此屬性或方法為私有，避免直接或意外的存取。<br>然而真的有需要修改或查看私有屬性時，可以透過新增 getter 和 setter 來達成。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">class Vehicle():</span><br><span class="line">    def __init__(self, owner, owner_id, license_plate):</span><br><span class="line">        self.owner = owner</span><br><span class="line">        self.__owner_id = owner_id</span><br><span class="line">        self.license_plate = license_plate</span><br><span class="line">    </span><br><span class="line">    # getter</span><br><span class="line">    def getID(self):</span><br><span class="line">        return self.__owner_id</span><br><span class="line"></span><br><span class="line">    # setter</span><br><span class="line">    def change_owner(self, new_owner, new_owner_id)</span><br><span class="line">        self.owner = new_owner</span><br><span class="line">        self.__owner_id = new_owner_id</span><br><span class="line">        return &quot;Owner change successfully.&quot;</span><br><span class="line">        </span><br><span class="line">Bob_vehicle = Vehicle(&#x27;Bob&#x27;, &#x27;Z111111111&#x27;, &#x27;KKK-123&#x27;)</span><br><span class="line"></span><br><span class="line">Bob_vehicle.getID() # 輸出：Z111111111</span><br><span class="line">Bob_vehicle.change_owner(&#x27;Alice&#x27;, &#x27;A222222222&#x27;)</span><br><span class="line">print(Bob_vehicle._Vehicle__owner_id)   # 輸出：A222222222</span><br></pre></td></tr></table></figure>
+
+<h1 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h1><p>透過類別與物件，我們可以構建結構清晰、易於維護的程式碼。就像整理衣服一樣，每個衣物都有它應該在的地方，你可以輕鬆地找到他們並搭配屬於自己的穿搭。<br>個人認為透過學習OOP可強化對程式碼之間關聯性的理解，也可以改善程式碼的品質與閱讀性。最後值得一再提及的是，邏輯合理且明確的分類是好的OOP開發的重要條件之一。一個清晰符合邏輯的定義可以大幅減少專案開發過程中的各種 error 和疏漏。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/%E7%89%A9%E4%BB%B6%E5%B0%8E%E5%90%91-OOP/" rel="tag"># 物件導向 OOP</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2024/11/11/mac-LLM-RAG/" rel="prev" title="在 Mac 上做自己的 RAG">
+      <i class="fa fa-chevron-left"></i> 在 Mac 上做自己的 RAG
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          網站概要
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF-OOP%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">什麼是 OOP？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%89%A9%E4%BB%B6%E5%92%8C%E9%A1%9E%E5%88%A5%EF%BC%88Object-and-Class%EF%BC%89"><span class="nav-number">2.</span> <span class="nav-text">物件和類別（Object and Class）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%98%97%E8%A9%A6%E5%AE%9A%E7%BE%A9%E9%A1%9E%E5%88%A5%E4%B8%A6%E5%BB%BA%E7%AB%8B%E7%89%A9%E4%BB%B6"><span class="nav-number">2.1.</span> <span class="nav-text">嘗試定義類別並建立物件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E3%80%8C%E7%B9%BC%E6%89%BF%E3%80%8D%E9%A1%9E%E5%88%A5"><span class="nav-number">2.2.</span> <span class="nav-text">「繼承」類別</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF%E5%A4%9A%E5%9E%8B%EF%BC%9F"><span class="nav-number">2.3.</span> <span class="nav-text">什麼是多型？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%82%BA%E4%BB%80%E9%BA%BC%E8%A6%81%E6%9C%89%E9%A1%9E%E5%88%A5%EF%BC%9F"><span class="nav-number">2.4.</span> <span class="nav-text">為什麼要有類別？</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8A%BD%E8%B1%A1%E9%A1%9E%E5%88%A5"><span class="nav-number">3.</span> <span class="nav-text">抽象類別</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A5%87%E6%80%AA%E7%9A%84%E7%B9%BC%E6%89%BF"><span class="nav-number">3.1.</span> <span class="nav-text">奇怪的繼承</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%90%E9%A1%9E%E5%88%A5%E6%98%AF%E7%88%B6%E9%A1%9E%E5%88%A5%E7%9A%84%E5%85%B6%E4%B8%AD%E4%B8%80%E7%A8%AE"><span class="nav-number">3.2.</span> <span class="nav-text">子類別是父類別的其中一種</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%98%8E%E7%A2%BA%E5%AE%9A%E7%BE%A9%E7%88%B6%E9%A1%9E%E5%88%A5"><span class="nav-number">3.3.</span> <span class="nav-text">明確定義父類別</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%BD%E8%B1%A1%E9%A1%9E%E5%88%A5-1"><span class="nav-number">3.4.</span> <span class="nav-text">抽象類別</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B0%81%E8%A3%9D%EF%BC%88Encapsulation%EF%BC%89"><span class="nav-number">4.</span> <span class="nav-text">封裝（Encapsulation）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A7%81%E6%9C%89%E5%B1%AC%E6%80%A7-Private-Attribute"><span class="nav-number">4.1.</span> <span class="nav-text">私有屬性(Private Attribute)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AA%9E"><span class="nav-number">5.</span> <span class="nav-text">結語</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Eric"
+      src="/images/account.jpg">
+  <p class="site-author-name" itemprop="name">Eric</p>
+  <div class="site-description" itemprop="description">一個紀錄亂點技能樹的地方</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/eric781ctf" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;eric781ctf" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:eric773dfl@gmail.com" title="E-Mail → mailto:eric773dfl@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.instagram.com/sheep_eric_0508" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;sheep_eric_0508" rel="noopener" target="_blank"><i class="fab fa-instagram fa-fw"></i>Instagram</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2024 – 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-ghost"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Eric</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 強力驅動
+  </div>
+
+
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+<script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
+
+<script>
+var options = {
+  bottom: '64px',
+  right: 'unset',
+  left: '32px',
+  time: '0.5s',
+  mixColor: '＃7B68EE',
+  backgroundColor: 'transparent',
+  buttonColorDark: '#100f2c',
+  buttonColorLight: '#fff',
+  saveInCookies: true,
+  label: '🌓',
+  autoMatchOsTheme: true
+}
+const darkmode = new Darkmode(options);
+window.darkmode = darkmode;
+darkmode.showWidget();
+</script>
+
+</body>
+</html>
