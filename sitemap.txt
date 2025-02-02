@@ -1,3 +1,4 @@
+https://eric781ctf.github.io/2025/02/02/Object-Orientation-Programming%20/
 https://eric781ctf.github.io/2024/11/11/mac-LLM-RAG/
 https://eric781ctf.github.io/2024/10/15/learning-unit-test/
 https://eric781ctf.github.io/2024/10/14/HCD/
@@ -19,6 +20,7 @@ https://eric781ctf.github.io/tags/OpenCV/
 https://eric781ctf.github.io/tags/Unit-test/
 https://eric781ctf.github.io/tags/LLM/
 https://eric781ctf.github.io/tags/LangChain/
+https://eric781ctf.github.io/tags/%E7%89%A9%E4%BB%B6%E5%B0%8E%E5%90%91-OOP/
 https://eric781ctf.github.io/categories/%E7%AD%86%E8%A8%98/
 https://eric781ctf.github.io/categories/%E5%AF%A6%E4%BD%9C/
 https://eric781ctf.github.io/categories/%E5%AD%B8%E7%BF%92%E7%B4%80%E9%8C%84/
