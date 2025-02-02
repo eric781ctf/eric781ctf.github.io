@@ -166,13 +166,6 @@
   </url>
   
   <url>
-    <loc>https://eric781ctf.github.io/tags/Unit-test/</loc>
-    <lastmod>2025-02-02</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://eric781ctf.github.io/tags/LLM/</loc>
     <lastmod>2025-02-02</lastmod>
     <changefreq>weekly</changefreq>
@@ -181,6 +174,13 @@
   
   <url>
     <loc>https://eric781ctf.github.io/tags/LangChain/</loc>
+    <lastmod>2025-02-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://eric781ctf.github.io/tags/Unit-test/</loc>
     <lastmod>2025-02-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
