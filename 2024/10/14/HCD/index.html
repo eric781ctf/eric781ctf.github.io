@@ -31,7 +31,7 @@
 <meta property="og:image" content="https://eric781ctf.github.io/images/HCD/gray.jpg">
 <meta property="og:image" content="https://eric781ctf.github.io/images/HCD/dst.jpg">
 <meta property="article:published_time" content="2024-10-14T12:26:33.000Z">
-<meta property="article:modified_time" content="2024-10-14T15:15:26.981Z">
+<meta property="article:modified_time" content="2025-02-11T12:49:43.681Z">
 <meta property="article:author" content="Eric">
 <meta property="article:tag" content="影像處理">
 <meta property="article:tag" content="OpenCV">
@@ -201,10 +201,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">發表於</span>
-              
 
-              <time title="建立時間：2024-10-14 20:26:33 / 修改時間：23:15:26" itemprop="dateCreated datePublished" datetime="2024-10-14T20:26:33+08:00">2024-10-14</time>
+              <time title="建立時間：2024-10-14 20:26:33" itemprop="dateCreated datePublished" datetime="2024-10-14T20:26:33+08:00">2024-10-14</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新於</span>
+                <time title="修改時間：2025-02-11 20:49:43" itemprop="dateModified" datetime="2025-02-11T20:49:43+08:00">2025-02-11</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -232,7 +238,7 @@
 <h1 id="實作"><a href="#實作" class="headerlink" title="實作"></a>實作</h1><p>原圖片，為了模擬實際機台拍攝的照片並不一定完整框住 IC 托盤，因此周圍都有留空。</p>
 <p><img src="/images/HCD/original.jpg" alt="original_img"></p>
 <p>接下來老樣子，讀圖片轉灰階</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">rgb_img = cv2.imread(path)</span><br><span class="line">gray_img = cv2.cvtColor(rgb_img, cv2.COLOR_RGB2GRAY)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">rgb_img = cv2.imread(path)</span><br><span class="line">gray_img = cv2.cvtColor(rgb_img, cv2.COLOR_RGB2GRAY)</span><br></pre></td></tr></table></figure>
 
 <p><img src="/images/HCD/gray.jpg" alt="gray_img"></p>
 <p>再來調整格式到 <code>cv2.cornerHarris</code> 的需求，並透過 <code>cv2.cornerHarris</code> 偵測 corner，以下參數直接套用官方教學文件之建議。</p>
@@ -242,10 +248,10 @@
 <li>ksize - 索伯算子（Sobel operator）的參數</li>
 <li>k - 自由參數</li>
 </ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">np_gray = np.float32(gray_img)</span><br><span class="line">dst = cv2.cornerHarris(np_gray, 2, 3, 0.04)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">np_gray = np.float32(gray_img)</span><br><span class="line">dst = cv2.cornerHarris(np_gray, <span class="number">2</span>, <span class="number">3</span>, <span class="number">0.04</span>)</span><br></pre></td></tr></table></figure>
 
 <p>為了方便在圖片上看到偵測的點，透過 <code>cv2.dilate</code> 擴大，並設 threshold 為 0.01 將其標在原始圖片上。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dst = cv2.dilate(dst,None)</span><br><span class="line">rgb_image[dst&gt;0.01*dst.max()]=[0,0,255]</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dst = cv2.dilate(dst,<span class="literal">None</span>)</span><br><span class="line">rgb_image[dst&gt;<span class="number">0.01</span>*dst.<span class="built_in">max</span>()]=[<span class="number">0</span>,<span class="number">0</span>,<span class="number">255</span>]</span><br></pre></td></tr></table></figure>
 
 <p><img src="/images/HCD/dst.jpg" alt="gray_img"></p>
 <p>不過不難發現，標出來的點有很多雜訊，因為桌子是有紋路的，而 HCD 的偵測方式之一就是兩條邊的周圍有明顯的光影變化。<br>當然在嚴謹的廠區中，這種狀況並不會發生，參數調整一下還是可以定位出 IC 托盤上每個孔的位置啦~~~</p>
