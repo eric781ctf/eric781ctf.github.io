@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"eric781ctf.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="近期準備轉換跑道，即使是資料工程師的職缺也不全然都是用Python的，也有用Java或是用C&#x2F;C++的企業。因此，想說趁著空窗期的這段時間稍微回顧一下Java的資料型態和一些邏輯。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java 複習1 - Basic">
+<meta property="og:url" content="https://eric781ctf.github.io/2025/03/19/java-review-1/index.html">
+<meta property="og:site_name" content="Eric&#39;s learning blog">
+<meta property="og:description" content="近期準備轉換跑道，即使是資料工程師的職缺也不全然都是用Python的，也有用Java或是用C&#x2F;C++的企業。因此，想說趁著空窗期的這段時間稍微回顧一下Java的資料型態和一些邏輯。">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2025-03-19T10:29:21.000Z">
+<meta property="article:modified_time" content="2025-03-20T11:44:01.024Z">
+<meta property="article:author" content="Eric">
+<meta property="article:tag" content="Java">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://eric781ctf.github.io/2025/03/19/java-review-1/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-TW'
+  };
+</script>
+
+  <title>Java 複習1 - Basic | Eric's learning blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<style>.darkmode--activated{--body-bg-color:#282828;--content-bg-color:#333;--card-bg-color:#555;--text-color:#ccc;--blockquote-color:#bbb;--link-color:#ccc;--link-hover-color:#eee;--brand-color:#ddd;--brand-hover-color:#ddd;--table-row-odd-bg-color:#282828;--table-row-hover-bg-color:#363636;--menu-item-bg-color:#555;--btn-default-bg:#222;--btn-default-color:#ccc;--btn-default-border-color:#555;--btn-default-hover-bg:#666;--btn-default-hover-color:#ccc;--btn-default-hover-border-color:#666;--highlight-background:#282b2e;--highlight-foreground:#a9b7c6;--highlight-gutter-background:#34393d;--highlight-gutter-foreground:#9ca9b6}.darkmode--activated img{opacity:.75}.darkmode--activated img:hover{opacity:.9}.darkmode--activated code{color:#69dbdc;background:0 0}button.darkmode-toggle{z-index:9999}.darkmode-ignore,img{display:flex!important}.beian img{display:inline-block!important}</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Eric's learning blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">一隻亂跑的羊</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔<span class="badge">8</span></a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>關於</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">12</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分類<span class="badge">3</span></a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>網站地圖</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://eric781ctf.github.io/2025/03/19/java-review-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/account.jpg">
+      <meta itemprop="name" content="Eric">
+      <meta itemprop="description" content="一個紀錄亂點技能樹的地方">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Eric's learning blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Java 複習1 - Basic
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">發表於</span>
+
+              <time title="建立時間：2025-03-19 18:29:21" itemprop="dateCreated datePublished" datetime="2025-03-19T18:29:21+08:00">2025-03-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新於</span>
+                <time title="修改時間：2025-03-20 19:44:01" itemprop="dateModified" datetime="2025-03-20T19:44:01+08:00">2025-03-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分類於</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">筆記</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>近期準備轉換跑道，即使是資料工程師的職缺也不全然都是用Python的，也有用Java或是用C&#x2F;C++的企業。因此，想說趁著空窗期的這段時間稍微回顧一下Java的資料型態和一些邏輯。</p>
+<span id="more"></span>
+
+<h1 id="變數"><a href="#變數" class="headerlink" title="變數"></a>變數</h1><p>相較於Python的動態型別，Java是強型別的語言，所有變數都必須在宣告時指定型態。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 這是 Python</span></span><br><span class="line">this_is_name = <span class="string">&quot;Bob&quot;</span></span><br><span class="line">this_is_int = <span class="number">10</span></span><br><span class="line">this_is_float = <span class="number">20.0</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 這是 Java</span></span><br><span class="line"><span class="type">int</span> num1;</span><br><span class="line"><span class="type">int</span> <span class="variable">num2</span> <span class="operator">=</span> <span class="number">5</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">char</span> name1;</span><br><span class="line"><span class="type">char</span> <span class="variable">name2</span> <span class="operator">=</span> <span class="string">&#x27;Bob&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<h1 id="記憶體區間"><a href="#記憶體區間" class="headerlink" title="記憶體區間"></a>記憶體區間</h1><p>在Java程式執行期間，記憶體可以分為三個部分：Global、Stack、Heap。</p>
+<h2 id="Global"><a href="#Global" class="headerlink" title="Global"></a>Global</h2><p>用來放全域變數、靜態變數。</p>
+<h2 id="Stack"><a href="#Stack" class="headerlink" title="Stack"></a>Stack</h2><p>Stack是由作業系統自動化管理的記憶體區塊。為了讓系統能夠清楚且有效地管理這些資源，Stack中所存放的資訊，通常在編譯的時候就能預先計算好它們的生命週期。也因為這樣，Stack主要用來存放以下這些能夠明確掌控生命週期的資料：</p>
+<ul>
+<li>區域變數 Local Variables</li>
+<li>方法的參數 Method Parameters</li>
+<li>方法的回傳位址 Method Return Address</li>
+</ul>
+<p>這些資料會隨著方法的執行而進入Stack，方法執行完畢後，對應的記憶體就會直接被回收，過程完全由系統自動處理，開發者不需要手動管理。</p>
+<p>然而，Stack空間是有限的。如果一次塞入太多資料，像是遞迴沒寫好導致無限呼叫，或是方法堆疊過深，就會造成<code>StackOverflowError</code>，這表示Stack的記憶體被用光光啦！</p>
+<h2 id="Heap"><a href="#Heap" class="headerlink" title="Heap"></a>Heap</h2><p>能夠被預測生命週期的資料，就會放在Stack；反過來，無法預測生命週期或大小的資料，就會被放進Heap。在Java裡，只要是透過<code>new</code>關鍵字產生的物件，基本上都會被存進Heap裡。不過，Heap跟Stack最大的不同點在於：Heap裡的記憶體不會自動回收。換句話說，資料放進Heap之後，系統不會幫你決定什麼時候把這塊記憶體清掉，如果一直放著不用，記憶體就會越佔越多，最後可能導致系統記憶體耗盡。</p>
+<p>幸好，Java幫我們設計了一個「垃圾回收機制（Garbage Collection, GC）」。這套機制會在程式執行過程中自動檢查：哪些物件已經不再被使用，然後主動把它們佔用的記憶體釋放出來。這樣一來，Java開發者就不用自己負責手動釋放記憶體，程式設計的負擔也少很多。</p>
+<p>不過要注意，Heap還是有上限的。如果產生太多物件、或記憶體被撐爆，最終遇到<code>OutOfMemoryError</code>，告訴你Heap空間不夠用了。</p>
+<p>小提醒：這不是資料結構裡的Heap（堆積樹）喔！</p>
+<h1 id="資料型態"><a href="#資料型態" class="headerlink" title="資料型態"></a>資料型態</h1><p>Java 的資料型態種類有兩種：</p>
+<ul>
+<li>基本資料型態 Primitive type</li>
+<li>參考資料型態 Reference type</li>
+</ul>
+<h2 id="基本資料型態"><a href="#基本資料型態" class="headerlink" title="基本資料型態"></a>基本資料型態</h2><p>Java 有以下八種預先定義好的資料型態：boolean, char, byte, short, int, long, float, double。</p>
+<table>
+<thead>
+<tr>
+<th>名稱</th>
+<th>位元數</th>
+<th>值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>boolean</td>
+<td></td>
+<td>true &#x2F; false</td>
+</tr>
+<tr>
+<td>char</td>
+<td>16</td>
+<td>‘\u0000’ to ‘\uFFFF’</td>
+</tr>
+<tr>
+<td>byte</td>
+<td>8</td>
+<td>-128 ~ +127</td>
+</tr>
+<tr>
+<td>short</td>
+<td>16</td>
+<td>-32768 ~ +32767</td>
+</tr>
+<tr>
+<td>int</td>
+<td>32</td>
+<td>-2147483648 ~ +2147483647</td>
+</tr>
+<tr>
+<td>long</td>
+<td>64</td>
+<td>-9223372036854775808 ~ +9223372036854775807</td>
+</tr>
+<tr>
+<td>float</td>
+<td>32</td>
+<td>-3.40292347E+38 ~ +3.40292347E+38</td>
+</tr>
+<tr>
+<td>double</td>
+<td>64</td>
+<td>-1.7976931348623157E+308 ~ +1.7976931348623157E+308</td>
+</tr>
+</tbody></table>
+<h2 id="參考資料型態"><a href="#參考資料型態" class="headerlink" title="參考資料型態"></a>參考資料型態</h2><p>在Java中，所有非基本資料型態的類型都屬於參考資料型態。例如：字串String、自定義的class、陣列Array、介面Interface、列舉enum…</p>
+<h2 id="Overload-溢位"><a href="#Overload-溢位" class="headerlink" title="Overload 溢位"></a>Overload 溢位</h2><p>從上表中可以看到，每個基本資料型態都有他的數值範圍，如果運算過程中超出了他可以表示的範圍，就會發生溢位。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> intmax=java.lang.Integer.MAX_VALUE;</span><br><span class="line"></span><br><span class="line">System.out.println(<span class="string">&quot;Max value of int : &quot;</span>+intmax);</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> sum;</span><br><span class="line"></span><br><span class="line">sum = intmax +<span class="number">1</span>;</span><br><span class="line">System.out.println(<span class="string">&quot;intmax +1= &quot;</span>+sum);  <span class="comment">//印出 intmax +1 的值</span></span><br><span class="line"></span><br><span class="line">sum = intmax +<span class="number">100</span>;</span><br><span class="line">System.out.println(<span class="string">&quot;intmax +100= &quot;</span>+sum);  <span class="comment">//印出 intmax +100 的值</span></span><br></pre></td></tr></table></figure>
+
+<p>執行結果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Max value of int : 2147483647</span><br><span class="line">intmax +1= -2147483648</span><br><span class="line">intmax +100= -2147483549</span><br></pre></td></tr></table></figure>
+
+<p>溢位是容易發生的程式錯誤，我們必須要清楚自己所處理的資料可能會到多少數值範圍，而選用適當的資料型態，或是加上檢查數值範圍的功能。</p>
+<h2 id="基本與參考資料型態之差異"><a href="#基本與參考資料型態之差異" class="headerlink" title="基本與參考資料型態之差異"></a>基本與參考資料型態之差異</h2><h1 id="運算子"><a href="#運算子" class="headerlink" title="運算子"></a>運算子</h1><h2 id="一元運算子"><a href="#一元運算子" class="headerlink" title="一元運算子"></a>一元運算子</h2><p>一元運算子只需要一個運算元</p>
+<table>
+<thead>
+<tr>
+<th>一元運算子</th>
+<th>含義</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>+</td>
+<td>正號</td>
+</tr>
+<tr>
+<td>-</td>
+<td>負號</td>
+</tr>
+<tr>
+<td>!</td>
+<td>NOT 否定</td>
+</tr>
+<tr>
+<td>~</td>
+<td>取 1 補數</td>
+</tr>
+</tbody></table>
+<h2 id="算數運算子"><a href="#算數運算子" class="headerlink" title="算數運算子"></a>算數運算子</h2><table>
+<thead>
+<tr>
+<th>算數運算子</th>
+<th>含義</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>+</td>
+<td>加法</td>
+</tr>
+<tr>
+<td>-</td>
+<td>減法</td>
+</tr>
+<tr>
+<td>*</td>
+<td>乘法</td>
+</tr>
+<tr>
+<td>&#x2F;</td>
+<td>取商數</td>
+</tr>
+<tr>
+<td>%</td>
+<td>取餘數</td>
+</tr>
+</tbody></table>
+<h2 id="關係運算子"><a href="#關係運算子" class="headerlink" title="關係運算子"></a>關係運算子</h2><table>
+<thead>
+<tr>
+<th>關係運算子</th>
+<th>含義</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>&gt;</td>
+<td>大於</td>
+</tr>
+<tr>
+<td>&lt;</td>
+<td>小於</td>
+</tr>
+<tr>
+<td>&gt;&#x3D;</td>
+<td>大於等於</td>
+</tr>
+<tr>
+<td>&lt;&#x3D;</td>
+<td>小於等於</td>
+</tr>
+<tr>
+<td>&#x3D;&#x3D;</td>
+<td>相等</td>
+</tr>
+<tr>
+<td>!&#x3D;</td>
+<td>不等於</td>
+</tr>
+</tbody></table>
+<h2 id="遞增與遞減運算子"><a href="#遞增與遞減運算子" class="headerlink" title="遞增與遞減運算子"></a>遞增與遞減運算子</h2><table>
+<thead>
+<tr>
+<th>遞增與遞減運算子</th>
+<th>含義</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>++</td>
+<td>遞增，變數加1</td>
+</tr>
+<tr>
+<td>–</td>
+<td>遞減，變數減1</td>
+</tr>
+</tbody></table>
+<h2 id="邏輯運算子"><a href="#邏輯運算子" class="headerlink" title="邏輯運算子"></a>邏輯運算子</h2><table>
+<thead>
+<tr>
+<th>邏輯運算子</th>
+<th>含義</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>&amp;&amp;</td>
+<td>AND</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<ul>
+<li>&amp;&amp;: 兩者都為真，結果才會為真。</li>
+<li>||: 只要其中一個為真，結果就會為真。</li>
+</ul>
+<h2 id="三元運算子"><a href="#三元運算子" class="headerlink" title="三元運算子"></a>三元運算子</h2><p>三元，就是要放入三個東西。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">判斷式 ？ 若判斷為真執行區塊 ： 若判斷為假執行區塊</span><br></pre></td></tr></table></figure>
+
+<p>範例如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="variable">a</span> <span class="operator">=</span> <span class="number">100</span>;</span><br><span class="line"><span class="type">int</span> <span class="variable">b</span> <span class="operator">=</span> <span class="number">20</span>;</span><br><span class="line"><span class="type">int</span> <span class="variable">c</span> <span class="operator">=</span> <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">boolean</span> <span class="variable">flag</span> <span class="operator">=</span> <span class="literal">true</span>;</span><br><span class="line">c = flag ? a : b;</span><br><span class="line">System.out.println(c);</span><br><span class="line"></span><br><span class="line">flag = <span class="literal">false</span>;</span><br><span class="line">c = flag ? a : b;</span><br><span class="line">System.out.println(c);</span><br></pre></td></tr></table></figure>
+
+<p>執行結果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">100</span><br><span class="line">20</span><br></pre></td></tr></table></figure>
+
+<p>仔細搞懂就會發現，他其實就是 if else 的縮寫！</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(flag)&#123;</span><br><span class="line">    c = a</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    c = b</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="型態比對運算子"><a href="#型態比對運算子" class="headerlink" title="型態比對運算子"></a>型態比對運算子</h2><p>在寫程式的時候，有時會需要檢查某個物件是否屬於指定的類別（class）、子類別（subclass）或介面（interface）。登登登！這時候我們就需要<code>instanceof</code>來做判斷，他會回傳boolean。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">App</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">A</span> <span class="variable">a</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">A</span>();</span><br><span class="line">        <span class="type">B</span> <span class="variable">b</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">B</span>();</span><br><span class="line">        System.out.println(a <span class="keyword">instanceof</span> A);</span><br><span class="line">        System.out.println(a <span class="keyword">instanceof</span> B);</span><br><span class="line">        System.out.println(b <span class="keyword">instanceof</span> B);</span><br><span class="line">        System.out.println(b <span class="keyword">instanceof</span> A);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">A</span> &#123; &#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">B</span> <span class="keyword">extends</span> <span class="title class_">A</span> &#123; &#125; </span><br></pre></td></tr></table></figure>
+
+<p>執行結果：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="literal">true</span>  <span class="comment">// a是A物件</span></span><br><span class="line"><span class="literal">false</span> <span class="comment">// a不是B物件</span></span><br><span class="line"><span class="literal">true</span>  <span class="comment">// b是B物件</span></span><br><span class="line"><span class="literal">true</span>  <span class="comment">// B繼承A，b是A的子類別，所以為true</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p>參考:<a target="_blank" rel="noopener" href="https://yubin551.gitbook.io/java-note/basic_java_programming/datatype/primitive_reference_difference">https://yubin551.gitbook.io/java-note/basic_java_programming/datatype/primitive_reference_difference</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Java/" rel="tag"># Java</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/02/02/OOP/" rel="prev" title="物件導向程式設計（OOP）">
+      <i class="fa fa-chevron-left"></i> 物件導向程式設計（OOP）
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          網站概要
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%8A%E6%95%B8"><span class="nav-number">1.</span> <span class="nav-text">變數</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A8%98%E6%86%B6%E9%AB%94%E5%8D%80%E9%96%93"><span class="nav-number">2.</span> <span class="nav-text">記憶體區間</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Global"><span class="nav-number">2.1.</span> <span class="nav-text">Global</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Stack"><span class="nav-number">2.2.</span> <span class="nav-text">Stack</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Heap"><span class="nav-number">2.3.</span> <span class="nav-text">Heap</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%B3%87%E6%96%99%E5%9E%8B%E6%85%8B"><span class="nav-number">3.</span> <span class="nav-text">資料型態</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E8%B3%87%E6%96%99%E5%9E%8B%E6%85%8B"><span class="nav-number">3.1.</span> <span class="nav-text">基本資料型態</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%83%E8%80%83%E8%B3%87%E6%96%99%E5%9E%8B%E6%85%8B"><span class="nav-number">3.2.</span> <span class="nav-text">參考資料型態</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Overload-%E6%BA%A2%E4%BD%8D"><span class="nav-number">3.3.</span> <span class="nav-text">Overload 溢位</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E8%88%87%E5%8F%83%E8%80%83%E8%B3%87%E6%96%99%E5%9E%8B%E6%85%8B%E4%B9%8B%E5%B7%AE%E7%95%B0"><span class="nav-number">3.4.</span> <span class="nav-text">基本與參考資料型態之差異</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%81%8B%E7%AE%97%E5%AD%90"><span class="nav-number">4.</span> <span class="nav-text">運算子</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E5%85%83%E9%81%8B%E7%AE%97%E5%AD%90"><span class="nav-number">4.1.</span> <span class="nav-text">一元運算子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%97%E6%95%B8%E9%81%8B%E7%AE%97%E5%AD%90"><span class="nav-number">4.2.</span> <span class="nav-text">算數運算子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%9C%E4%BF%82%E9%81%8B%E7%AE%97%E5%AD%90"><span class="nav-number">4.3.</span> <span class="nav-text">關係運算子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%81%9E%E5%A2%9E%E8%88%87%E9%81%9E%E6%B8%9B%E9%81%8B%E7%AE%97%E5%AD%90"><span class="nav-number">4.4.</span> <span class="nav-text">遞增與遞減運算子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%82%8F%E8%BC%AF%E9%81%8B%E7%AE%97%E5%AD%90"><span class="nav-number">4.5.</span> <span class="nav-text">邏輯運算子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E5%85%83%E9%81%8B%E7%AE%97%E5%AD%90"><span class="nav-number">4.6.</span> <span class="nav-text">三元運算子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9E%8B%E6%85%8B%E6%AF%94%E5%B0%8D%E9%81%8B%E7%AE%97%E5%AD%90"><span class="nav-number">4.7.</span> <span class="nav-text">型態比對運算子</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Eric"
+      src="/images/account.jpg">
+  <p class="site-author-name" itemprop="name">Eric</p>
+  <div class="site-description" itemprop="description">一個紀錄亂點技能樹的地方</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/eric781ctf" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;eric781ctf" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:eric773dfl@gmail.com" title="E-Mail → mailto:eric773dfl@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.instagram.com/sheep_eric_0508" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;sheep_eric_0508" rel="noopener" target="_blank"><i class="fab fa-instagram fa-fw"></i>Instagram</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2024 – 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-ghost"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Eric</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 強力驅動
+  </div>
+
+
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+<script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
+
+<script>
+var options = {
+  bottom: '64px',
+  right: 'unset',
+  left: '32px',
+  time: '0.5s',
+  mixColor: '＃7B68EE',
+  backgroundColor: 'transparent',
+  buttonColorDark: '#100f2c',
+  buttonColorLight: '#fff',
+  saveInCookies: true,
+  label: '🌓',
+  autoMatchOsTheme: true
+}
+const darkmode = new Darkmode(options);
+window.darkmode = darkmode;
+darkmode.showWidget();
+</script>
+
+</body>
+</html>
