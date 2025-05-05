@@ -5,6 +5,30 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
 <meta name="generator" content="Hexo 7.3.0">
+
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: "base",
+      themeVariables: {
+        primaryColor: "#1f77b4",
+        edgeLabelBackground: "#fcfcf7",
+        lineColor: "#eaed37",
+        textColor: "#cc14f5",
+        background: "#fcfcf7"
+      }
+    });
+
+    document.querySelectorAll('.mermaid').forEach((el) => {
+      const code = el.textContent;
+      el.removeAttribute('data-processed'); // 重設處理狀態
+      el.innerHTML = code;                  // 還原原始文字內容
+      mermaid.init(undefined, el);          // 手動初始化渲染
+    });
+  });
+</script>
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -22,13 +46,13 @@
 
   <meta name="description" content="去年看到很多人在介紹 GitHub 支援 Markdown 繪製 Mermaid 的相關文章，讓我認識了什麼是 Mermaid，而這也讓我脫離了 draw.io 的苦海！每次繪製流程圖、架構圖、時序圖時，我都希望能更簡單的繪製(不需要自己對每個圖示都手動對齊)、更方便的管理(不用每次都下載繪製專案檔)。Mermaid 的語法非常簡單，搭配 Markdown 直接寫在文件中，對我來說實在是太方便了！">
 <meta property="og:type" content="article">
-<meta property="og:title" content="與 Mermaid 的相見歡">
+<meta property="og:title" content="與 Mermaid 的初次見面">
 <meta property="og:url" content="https://eric781ctf.github.io/2025/05/05/mermaid-learning/index.html">
 <meta property="og:site_name" content="Eric&#39;s learning blog">
 <meta property="og:description" content="去年看到很多人在介紹 GitHub 支援 Markdown 繪製 Mermaid 的相關文章，讓我認識了什麼是 Mermaid，而這也讓我脫離了 draw.io 的苦海！每次繪製流程圖、架構圖、時序圖時，我都希望能更簡單的繪製(不需要自己對每個圖示都手動對齊)、更方便的管理(不用每次都下載繪製專案檔)。Mermaid 的語法非常簡單，搭配 Markdown 直接寫在文件中，對我來說實在是太方便了！">
 <meta property="og:locale" content="zh_TW">
 <meta property="article:published_time" content="2025-05-05T02:09:06.000Z">
-<meta property="article:modified_time" content="2025-05-05T02:44:58.540Z">
+<meta property="article:modified_time" content="2025-05-05T07:30:11.710Z">
 <meta property="article:author" content="Eric">
 <meta property="article:tag" content="流程圖">
 <meta property="article:tag" content="專案規劃">
@@ -48,7 +72,7 @@
   };
 </script>
 
-  <title>與 Mermaid 的相見歡 | Eric's learning blog</title>
+  <title>與 Mermaid 的初次見面 | Eric's learning blog</title>
   
 
 
@@ -188,7 +212,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          與 Mermaid 的相見歡
+          與 Mermaid 的初次見面
         </h1>
 
         <div class="post-meta">
@@ -199,7 +223,7 @@
               <span class="post-meta-item-text">發表於</span>
               
 
-              <time title="建立時間：2025-05-05 10:09:06 / 修改時間：10:44:58" itemprop="dateCreated datePublished" datetime="2025-05-05T10:09:06+08:00">2025-05-05</time>
+              <time title="建立時間：2025-05-05 10:09:06 / 修改時間：15:30:11" itemprop="dateCreated datePublished" datetime="2025-05-05T10:09:06+08:00">2025-05-05</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -242,28 +266,41 @@
 <li>Notion</li>
 <li>靜態網站新增擴充 js 套件</li>
 </ul>
-<h1 id="Mermaid-語法"><a href="#Mermaid-語法" class="headerlink" title="Mermaid 語法"></a>Mermaid 語法</h1><p>以下會介紹一些我有用到過的圖表語法範例，可以直接貼到 Markdown 中自行修改。除了本文所介紹的以外，還有相當多種適用不同情境的圖表可供繪製，可以多多參考<a target="_blank" rel="noopener" href="https://mermaid.js.org/">官方網站</a>喔！</p>
-<p>在每張圖表都可以用以下方式加上標題喔！</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: My Chart</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: My Chart</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
-
-
-<h2 id="Flowchart"><a href="#Flowchart" class="headerlink" title="Flowchart"></a>Flowchart</h2><h3 id="方向"><a href="#方向" class="headerlink" title="方向"></a>方向</h3><p>可以用以下範例去選擇流程圖的起點至終點的走向，預設是 TB 由上到下</p>
+<h1 id="Mermaid-語法"><a href="#Mermaid-語法" class="headerlink" title="Mermaid 語法"></a>Mermaid 語法</h1><p>以下會介紹一些我有用到過的圖表語法範例，可以直接貼到 Markdown 中自行修改。除了本文所介紹的流程圖以外，還有相當多種適用不同情境的圖表可供繪製，可以多多參考<a target="_blank" rel="noopener" href="https://mermaid.js.org/">官方網站</a>喔！</p>
+<h2 id="Flowchart"><a href="#Flowchart" class="headerlink" title="Flowchart"></a>Flowchart</h2><h3 id="Direction"><a href="#Direction" class="headerlink" title="Direction"></a>Direction</h3><p>可以用以下範例去選擇流程圖的起點至終點的走向，預設是 TB 由上到下</p>
 <ul>
 <li>TB：由上到下（Top to bottom）</li>
 <li>BT：由下到上（Bottom to top）</li>
 <li>RL：由右到左（Right to left）</li>
 <li>LR：由左到右（Left to right）</li>
 </ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">flowchart TB</span><br><span class="line">    A ---&gt; B</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: Example of different mode</span><br><span class="line">---</span><br><span class="line">flowchart LR</span><br><span class="line">    A ---&gt; B</span><br><span class="line">    B ---&gt; C</span><br><span class="line">    C ---&gt; D</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">flowchart TB</span><br><span class="line">    A ---&gt; B</span><br></pre></td></tr></table></figure>
+<div class="mermaid">
+flowchart LR
+    A ---> B
+    B ---> C
+    C ---> D
+</div>
 
 
+<h3 id="Node"><a href="#Node" class="headerlink" title="Node"></a>Node</h3><p>從上面的範例可以看到ABCD四個長方形節點，在沒有加入任何語法時，預設Node name 為你輸入的 id，形狀為長方形。我們可以透過與法新增不同名稱、圖形的節點。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">flowchart LR</span><br><span class="line">    id1(text) --- id2([text])</span><br><span class="line">    id2 -.-&gt; id3[[text]]</span><br><span class="line">    id3 === id4[(text)]</span><br><span class="line">    id4 --&gt; id5((text))</span><br><span class="line">    id5 -.-&gt; id6&#123;text&#125;</span><br><span class="line"></span><br><span class="line">    id7[/text/] ==&gt; id8[\text\]</span><br><span class="line">    id8 --- |Yes| id9[/text\]</span><br><span class="line">    id9 --&gt; |No| id10(((text)))</span><br></pre></td></tr></table></figure>
+<div class="mermaid">
+flowchart LR
+    id1(id1) --- id2([id2])
+    id2 -.-> id3[[id3]]
+    id3 === id4[(id4)]
+    id4 --> id5((id5))
+    id5 -.-> id6{id6}
 
+<pre><code>id7[/id7/] ==&gt; id8[\id8\]
+id8 --- |Yes| id9[/id9\]
+id9 --&gt; |No| id10(((id10)))
+</code></pre>
+</div>
 
-<h2 id="Sequence-Diagram"><a href="#Sequence-Diagram" class="headerlink" title="Sequence Diagram"></a>Sequence Diagram</h2><h2 id="Class-Diagram"><a href="#Class-Diagram" class="headerlink" title="Class Diagram"></a>Class Diagram</h2><h2 id="State-Diagram"><a href="#State-Diagram" class="headerlink" title="State Diagram"></a>State Diagram</h2><h2 id="Gantt"><a href="#Gantt" class="headerlink" title="Gantt"></a>Gantt</h2><h2 id="Pie-Chart"><a href="#Pie-Chart" class="headerlink" title="Pie Chart"></a>Pie Chart</h2><h2 id="Quadrant-Chart"><a href="#Quadrant-Chart" class="headerlink" title="Quadrant Chart"></a>Quadrant Chart</h2><h2 id="Timeline"><a href="#Timeline" class="headerlink" title="Timeline"></a>Timeline</h2><h2 id="XY-Chart"><a href="#XY-Chart" class="headerlink" title="XY Chart"></a>XY Chart</h2><h2 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h2><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><p><a target="_blank" rel="noopener" href="https://mermaid.js.org/">Mermaid</a></p>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><p><a target="_blank" rel="noopener" href="https://mermaid.js.org/">Mermaid</a></p>
 
     </div>
 
@@ -346,7 +383,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Mermaid-%E6%98%AF%E4%BB%80%E9%BA%BC"><span class="nav-number">1.</span> <span class="nav-text">Mermaid 是什麼</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%88%91%E9%9C%80%E8%A6%81%E5%AE%89%E8%A3%9D%E6%89%8D%E8%83%BD%E4%BD%BF%E7%94%A8%E5%97%8E"><span class="nav-number">2.</span> <span class="nav-text">我需要安裝才能使用嗎?</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Mermaid-%E8%AA%9E%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text">Mermaid 語法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Flowchart"><span class="nav-number">3.1.</span> <span class="nav-text">Flowchart</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E5%90%91"><span class="nav-number">3.1.1.</span> <span class="nav-text">方向</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Sequence-Diagram"><span class="nav-number">3.2.</span> <span class="nav-text">Sequence Diagram</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Class-Diagram"><span class="nav-number">3.3.</span> <span class="nav-text">Class Diagram</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#State-Diagram"><span class="nav-number">3.4.</span> <span class="nav-text">State Diagram</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Gantt"><span class="nav-number">3.5.</span> <span class="nav-text">Gantt</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Pie-Chart"><span class="nav-number">3.6.</span> <span class="nav-text">Pie Chart</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Quadrant-Chart"><span class="nav-number">3.7.</span> <span class="nav-text">Quadrant Chart</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Timeline"><span class="nav-number">3.8.</span> <span class="nav-text">Timeline</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#XY-Chart"><span class="nav-number">3.9.</span> <span class="nav-text">XY Chart</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Architecture"><span class="nav-number">3.10.</span> <span class="nav-text">Architecture</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">4.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Mermaid-%E6%98%AF%E4%BB%80%E9%BA%BC"><span class="nav-number">1.</span> <span class="nav-text">Mermaid 是什麼</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%88%91%E9%9C%80%E8%A6%81%E5%AE%89%E8%A3%9D%E6%89%8D%E8%83%BD%E4%BD%BF%E7%94%A8%E5%97%8E"><span class="nav-number">2.</span> <span class="nav-text">我需要安裝才能使用嗎?</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Mermaid-%E8%AA%9E%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text">Mermaid 語法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Flowchart"><span class="nav-number">3.1.</span> <span class="nav-text">Flowchart</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Direction"><span class="nav-number">3.1.1.</span> <span class="nav-text">Direction</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Node"><span class="nav-number">3.1.2.</span> <span class="nav-text">Node</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">4.</span> <span class="nav-text">Reference</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -469,6 +506,19 @@
 
 
 
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
 
 
   
