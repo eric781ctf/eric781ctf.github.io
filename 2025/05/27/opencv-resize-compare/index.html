@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: "base",
+      themeVariables: {
+        primaryColor: "#1f77b4",
+        edgeLabelBackground: "#fcfcf7",
+        lineColor: "#eaed37",
+        textColor: "#cc14f5",
+        background: "#fcfcf7"
+      }
+    });
+
+    document.querySelectorAll('.mermaid').forEach((el) => {
+      const code = el.textContent;
+      el.removeAttribute('data-processed'); // 重設處理狀態
+      el.innerHTML = code;                  // 還原原始文字內容
+      mermaid.init(undefined, el);          // 手動初始化渲染
+    });
+  });
+</script>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"eric781ctf.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="過去常常使用 OpenCV 的各種功能，包含轉灰階或是放大縮小。放大縮小雖然大概知道他的算法邏輯，也看得出來放大縮小後和原始圖片的差異，但很難說出不同方法實際上有那些差異。因此！今天我決定把這幾個常用的方法進行實作然後進行數值上的比較。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="以圖表比較 OpenCV 中不同的 resize 方法">
+<meta property="og:url" content="https://eric781ctf.github.io/2025/05/27/opencv-resize-compare/index.html">
+<meta property="og:site_name" content="Eric&#39;s learning blog">
+<meta property="og:description" content="過去常常使用 OpenCV 的各種功能，包含轉灰階或是放大縮小。放大縮小雖然大概知道他的算法邏輯，也看得出來放大縮小後和原始圖片的差異，但很難說出不同方法實際上有那些差異。因此！今天我決定把這幾個常用的方法進行實作然後進行數值上的比較。">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://eric781ctf.github.io/images/opencv-resize-compare/analysis/0_1x_Entropy.png">
+<meta property="og:image" content="https://eric781ctf.github.io/images/opencv-resize-compare/analysis/0_1x_Mean%20LAB.png">
+<meta property="og:image" content="https://eric781ctf.github.io/images/opencv-resize-compare/analysis/0_1x_Mean%20RGB.png">
+<meta property="og:image" content="https://eric781ctf.github.io/images/opencv-resize-compare/analysis/0_1x_Sharpness.png">
+<meta property="og:image" content="https://eric781ctf.github.io/images/opencv-resize-compare/analysis/0_1x_Texture.png">
+<meta property="og:image" content="https://eric781ctf.github.io/images/opencv-resize-compare/analysis/0_2x_Entropy.png">
+<meta property="og:image" content="https://eric781ctf.github.io/images/opencv-resize-compare/analysis/0_2x_Mean%20LAB.png">
+<meta property="og:image" content="https://eric781ctf.github.io/images/opencv-resize-compare/analysis/0_2x_Mean%20RGB.png">
+<meta property="og:image" content="https://eric781ctf.github.io/images/opencv-resize-compare/analysis/0_2x_Sharpness.png">
+<meta property="og:image" content="https://eric781ctf.github.io/images/opencv-resize-compare/analysis/0_2x_Texture.png">
+<meta property="og:image" content="https://eric781ctf.github.io/images/opencv-resize-compare/analysis/0_5x_Entropy.png">
+<meta property="og:image" content="https://eric781ctf.github.io/images/opencv-resize-compare/analysis/0_5x_Mean%20LAB.png">
+<meta property="og:image" content="https://eric781ctf.github.io/images/opencv-resize-compare/analysis/0_5x_Mean%20RGB.png">
+<meta property="og:image" content="https://eric781ctf.github.io/images/opencv-resize-compare/analysis/0_5x_Sharpness.png">
+<meta property="og:image" content="https://eric781ctf.github.io/images/opencv-resize-compare/analysis/0_5x_Texture.png">
+<meta property="og:image" content="https://eric781ctf.github.io/images/opencv-resize-compare/analysis/2x_Entropy.png">
+<meta property="og:image" content="https://eric781ctf.github.io/images/opencv-resize-compare/analysis/2x_Mean%20LAB.png">
+<meta property="og:image" content="https://eric781ctf.github.io/images/opencv-resize-compare/analysis/2x_Mean%20RGB.png">
+<meta property="og:image" content="https://eric781ctf.github.io/images/opencv-resize-compare/analysis/2x_Sharpness.png">
+<meta property="og:image" content="https://eric781ctf.github.io/images/opencv-resize-compare/analysis/2x_Texture.png">
+<meta property="og:image" content="https://eric781ctf.github.io/images/opencv-resize-compare/analysis/5x_Entropy.png">
+<meta property="og:image" content="https://eric781ctf.github.io/images/opencv-resize-compare/analysis/5x_Mean%20LAB.png">
+<meta property="og:image" content="https://eric781ctf.github.io/images/opencv-resize-compare/analysis/5x_Mean%20RGB.png">
+<meta property="og:image" content="https://eric781ctf.github.io/images/opencv-resize-compare/analysis/5x_Sharpness.png">
+<meta property="og:image" content="https://eric781ctf.github.io/images/opencv-resize-compare/analysis/5x_Texture.png">
+<meta property="og:image" content="https://eric781ctf.github.io/images/opencv-resize-compare/analysis/10x_Entropy.png">
+<meta property="og:image" content="https://eric781ctf.github.io/images/opencv-resize-compare/analysis/10x_Mean%20LAB.png">
+<meta property="og:image" content="https://eric781ctf.github.io/images/opencv-resize-compare/analysis/10x_Mean%20RGB.png">
+<meta property="og:image" content="https://eric781ctf.github.io/images/opencv-resize-compare/analysis/10x_Sharpness.png">
+<meta property="og:image" content="https://eric781ctf.github.io/images/opencv-resize-compare/analysis/10x_Texture.png">
+<meta property="article:published_time" content="2025-05-27T12:36:53.000Z">
+<meta property="article:modified_time" content="2025-05-27T13:02:11.732Z">
+<meta property="article:author" content="Eric">
+<meta property="article:tag" content="影像處理">
+<meta property="article:tag" content="OpenCV">
+<meta property="article:tag" content="Python">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://eric781ctf.github.io/images/opencv-resize-compare/analysis/0_1x_Entropy.png">
+
+<link rel="canonical" href="https://eric781ctf.github.io/2025/05/27/opencv-resize-compare/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-TW'
+  };
+</script>
+
+  <title>以圖表比較 OpenCV 中不同的 resize 方法 | Eric's learning blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<style>.darkmode--activated{--body-bg-color:#282828;--content-bg-color:#333;--card-bg-color:#555;--text-color:#ccc;--blockquote-color:#bbb;--link-color:#ccc;--link-hover-color:#eee;--brand-color:#ddd;--brand-hover-color:#ddd;--table-row-odd-bg-color:#282828;--table-row-hover-bg-color:#363636;--menu-item-bg-color:#555;--btn-default-bg:#222;--btn-default-color:#ccc;--btn-default-border-color:#555;--btn-default-hover-bg:#666;--btn-default-hover-color:#ccc;--btn-default-hover-border-color:#666;--highlight-background:#282b2e;--highlight-foreground:#a9b7c6;--highlight-gutter-background:#34393d;--highlight-gutter-foreground:#9ca9b6}.darkmode--activated img{opacity:.75}.darkmode--activated img:hover{opacity:.9}.darkmode--activated code{color:#69dbdc;background:0 0}button.darkmode-toggle{z-index:9999}.darkmode-ignore,img{display:flex!important}.beian img{display:inline-block!important}</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Eric's learning blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">一隻亂跑的羊</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔<span class="badge">10</span></a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>關於</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">15</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分類<span class="badge">3</span></a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>網站地圖</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://eric781ctf.github.io/2025/05/27/opencv-resize-compare/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/account.jpg">
+      <meta itemprop="name" content="Eric">
+      <meta itemprop="description" content="一個紀錄亂點技能樹的地方">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Eric's learning blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          以圖表比較 OpenCV 中不同的 resize 方法
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">發表於</span>
+              
+
+              <time title="建立時間：2025-05-27 20:36:53 / 修改時間：21:02:11" itemprop="dateCreated datePublished" datetime="2025-05-27T20:36:53+08:00">2025-05-27</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分類於</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%B8%E7%BF%92%E7%B4%80%E9%8C%84/" itemprop="url" rel="index"><span itemprop="name">學習紀錄</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>過去常常使用 OpenCV 的各種功能，包含轉灰階或是放大縮小。放大縮小雖然大概知道他的算法邏輯，也看得出來放大縮小後和原始圖片的差異，但很難說出不同方法實際上有那些差異。因此！今天我決定把這幾個常用的方法進行實作然後進行數值上的比較。</p>
+<span id="more"></span>
+
+<h1 id="實驗條件"><a href="#實驗條件" class="headerlink" title="實驗條件"></a>實驗條件</h1><p>接下來會說明今天的實驗條件，包含參賽的 resize 方法。</p>
+<h2 id="Resize-倍率"><a href="#Resize-倍率" class="headerlink" title="Resize 倍率"></a>Resize 倍率</h2><ul>
+<li>放大：<code>2x</code>, <code>5x</code>, <code>10x</code></li>
+<li>縮小：<code>0.5x</code>, <code>0.2x</code>, <code>0.1x</code></li>
+</ul>
+<h2 id="Resize-方法"><a href="#Resize-方法" class="headerlink" title="Resize 方法"></a>Resize 方法</h2><p>以下是今天參賽的 resize 方法以及他們分別會進行何種縮放。</p>
+<ul>
+<li><code>cv2.INTER_LINEAR</code>：both</li>
+<li><code>cv2.INTER_AREA</code>：downscale</li>
+<li><code>cv2.INTER_CUBIC</code>：upscale</li>
+<li><code>cv2.INTER_LANCZOS4</code>：upscale</li>
+<li><code>cv2.INTER_NEAREST</code>：both</li>
+</ul>
+<h2 id="比較方法"><a href="#比較方法" class="headerlink" title="比較方法"></a>比較方法</h2><p>對原始圖片進行每種方法的縮放，共會產生 21 張經過縮放後的圖片，接著以倍率和方法為單位建立視覺化圖表進行比較。</p>
+<ul>
+<li><code>Mean RGB/LAB</code>：亮度、色彩偏移分析</li>
+<li><code>Sharpness</code>：Laplacian 銳利度</li>
+<li><code>Texture</code>：Sobel 邊緣強度</li>
+<li><code>Entropy</code>：資訊熵，細節豐富程度</li>
+</ul>
+<h1 id="實驗結果展示"><a href="#實驗結果展示" class="headerlink" title="實驗結果展示"></a>實驗結果展示</h1><p>以下會根據放大縮小的倍率為一節的單位展示圖表分析，原圖可以參考 <a target="_blank" rel="noopener" href="https://github.com/eric781ctf/opencv-resize-method-compare/tree/main/images">GitHub</a></p>
+<h2 id="0-1x"><a href="#0-1x" class="headerlink" title="0.1x"></a>0.1x</h2><p><img src="/images/opencv-resize-compare/analysis/0_1x_Entropy.png" alt="0_1x_Entropy"><br><img src="/images/opencv-resize-compare/analysis/0_1x_Mean%20LAB.png" alt="0_1x_Mean LAB"><br><img src="/images/opencv-resize-compare/analysis/0_1x_Mean%20RGB.png" alt="0_1x_Mean RGB"><br><img src="/images/opencv-resize-compare/analysis/0_1x_Sharpness.png" alt="0_1x_Sharpness"><br><img src="/images/opencv-resize-compare/analysis/0_1x_Texture.png" alt="0_1x_Texture"></p>
+<h2 id="0-2x"><a href="#0-2x" class="headerlink" title="0.2x"></a>0.2x</h2><p><img src="/images/opencv-resize-compare/analysis/0_2x_Entropy.png" alt="0_2x_Entropy"><br><img src="/images/opencv-resize-compare/analysis/0_2x_Mean%20LAB.png" alt="0_2x_Mean LAB"><br><img src="/images/opencv-resize-compare/analysis/0_2x_Mean%20RGB.png" alt="0_2x_Mean RGB"><br><img src="/images/opencv-resize-compare/analysis/0_2x_Sharpness.png" alt="0_2x_Sharpness"><br><img src="/images/opencv-resize-compare/analysis/0_2x_Texture.png" alt="0_2x_Texture"></p>
+<h2 id="0-5x"><a href="#0-5x" class="headerlink" title="0.5x"></a>0.5x</h2><p><img src="/images/opencv-resize-compare/analysis/0_5x_Entropy.png" alt="0_5x_Entropy"><br><img src="/images/opencv-resize-compare/analysis/0_5x_Mean%20LAB.png" alt="0_5x_Mean LAB"><br><img src="/images/opencv-resize-compare/analysis/0_5x_Mean%20RGB.png" alt="0_5x_Mean RGB"><br><img src="/images/opencv-resize-compare/analysis/0_5x_Sharpness.png" alt="0_5x_Sharpness"><br><img src="/images/opencv-resize-compare/analysis/0_5x_Texture.png" alt="0_5x_Texture"></p>
+<h2 id="2x"><a href="#2x" class="headerlink" title="2x"></a>2x</h2><p><img src="/images/opencv-resize-compare/analysis/2x_Entropy.png" alt="2x_Entropy"><br><img src="/images/opencv-resize-compare/analysis/2x_Mean%20LAB.png" alt="2x_Mean LAB"><br><img src="/images/opencv-resize-compare/analysis/2x_Mean%20RGB.png" alt="2x_Mean RGB"><br><img src="/images/opencv-resize-compare/analysis/2x_Sharpness.png" alt="2x_Sharpness"><br><img src="/images/opencv-resize-compare/analysis/2x_Texture.png" alt="2x_Texture"></p>
+<h2 id="5x"><a href="#5x" class="headerlink" title="5x"></a>5x</h2><p><img src="/images/opencv-resize-compare/analysis/5x_Entropy.png" alt="5x_Entropy"><br><img src="/images/opencv-resize-compare/analysis/5x_Mean%20LAB.png" alt="5x_Mean LAB"><br><img src="/images/opencv-resize-compare/analysis/5x_Mean%20RGB.png" alt="5x_Mean RGB"><br><img src="/images/opencv-resize-compare/analysis/5x_Sharpness.png" alt="5x_Sharpness"><br><img src="/images/opencv-resize-compare/analysis/5x_Texture.png" alt="5x_Texture"></p>
+<h2 id="10x"><a href="#10x" class="headerlink" title="10x"></a>10x</h2><p><img src="/images/opencv-resize-compare/analysis/10x_Entropy.png" alt="10x_Entropy"><br><img src="/images/opencv-resize-compare/analysis/10x_Mean%20LAB.png" alt="10x_Mean LAB"><br><img src="/images/opencv-resize-compare/analysis/10x_Mean%20RGB.png" alt="10x_Mean RGB"><br><img src="/images/opencv-resize-compare/analysis/10x_Sharpness.png" alt="10x_Sharpness"><br><img src="/images/opencv-resize-compare/analysis/10x_Texture.png" alt="10x_Texture"></p>
+<h1 id="結尾"><a href="#結尾" class="headerlink" title="結尾"></a>結尾</h1><p>有興趣的各位可以到我的<a target="_blank" rel="noopener" href="https://github.com/eric781ctf/opencv-resize-method-compare">GitHub repo</a>逛逛，看看有沒有可以補充的。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%BD%B1%E5%83%8F%E8%99%95%E7%90%86/" rel="tag"># 影像處理</a>
+              <a href="/tags/OpenCV/" rel="tag"># OpenCV</a>
+              <a href="/tags/Python/" rel="tag"># Python</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/05/05/mermaid-learning/" rel="prev" title="與 Mermaid 的初次見面">
+      <i class="fa fa-chevron-left"></i> 與 Mermaid 的初次見面
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          網站概要
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%A6%E9%A9%97%E6%A2%9D%E4%BB%B6"><span class="nav-number">1.</span> <span class="nav-text">實驗條件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Resize-%E5%80%8D%E7%8E%87"><span class="nav-number">1.1.</span> <span class="nav-text">Resize 倍率</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Resize-%E6%96%B9%E6%B3%95"><span class="nav-number">1.2.</span> <span class="nav-text">Resize 方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AF%94%E8%BC%83%E6%96%B9%E6%B3%95"><span class="nav-number">1.3.</span> <span class="nav-text">比較方法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%A6%E9%A9%97%E7%B5%90%E6%9E%9C%E5%B1%95%E7%A4%BA"><span class="nav-number">2.</span> <span class="nav-text">實驗結果展示</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0-1x"><span class="nav-number">2.1.</span> <span class="nav-text">0.1x</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0-2x"><span class="nav-number">2.2.</span> <span class="nav-text">0.2x</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0-5x"><span class="nav-number">2.3.</span> <span class="nav-text">0.5x</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2x"><span class="nav-number">2.4.</span> <span class="nav-text">2x</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5x"><span class="nav-number">2.5.</span> <span class="nav-text">5x</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#10x"><span class="nav-number">2.6.</span> <span class="nav-text">10x</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E5%B0%BE"><span class="nav-number">3.</span> <span class="nav-text">結尾</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Eric"
+      src="/images/account.jpg">
+  <p class="site-author-name" itemprop="name">Eric</p>
+  <div class="site-description" itemprop="description">一個紀錄亂點技能樹的地方</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/eric781ctf" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;eric781ctf" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:eric773dfl@gmail.com" title="E-Mail → mailto:eric773dfl@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.instagram.com/sheep_eric_0508" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;sheep_eric_0508" rel="noopener" target="_blank"><i class="fab fa-instagram fa-fw"></i>Instagram</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2024 – 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-ghost"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Eric</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 強力驅動
+  </div>
+
+
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+<script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
+
+<script>
+var options = {
+  bottom: '64px',
+  right: 'unset',
+  left: '32px',
+  time: '0.5s',
+  mixColor: '＃7B68EE',
+  backgroundColor: 'transparent',
+  buttonColorDark: '#100f2c',
+  buttonColorLight: '#fff',
+  saveInCookies: true,
+  label: '🌓',
+  autoMatchOsTheme: true
+}
+const darkmode = new Darkmode(options);
+window.darkmode = darkmode;
+darkmode.showWidget();
+</script>
+
+</body>
+</html>
